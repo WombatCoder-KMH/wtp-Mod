@@ -55,7 +55,7 @@
 	</Define>
 	<Define>
 		<DefineName>IMMIGRATION_MAX_CROSS_LIMIT</DefineName>
-		<iDefineIntVal>1000</iDefineIntVal>
+		<iDefineIntVal>40000</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>NO_BAD_GOODIES_MAP_RANGE_PERCENT</DefineName>
@@ -1146,7 +1146,7 @@
 	<!-- XP cap begin -->
 	<Define>
 		<DefineName>ANIMAL_MAX_XP_VALUE</DefineName>
-		<iDefineIntVal>2</iDefineIntVal>
+		<iDefineIntVal>1000000</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>ESCAPE_MAX_XP_VALUE</DefineName>
