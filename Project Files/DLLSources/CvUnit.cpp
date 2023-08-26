@@ -13033,6 +13033,34 @@ const CvWString CvUnit::getNameNoDesc() const
 	return m_szName.GetCString();
 }
 
+std::vector<CvWString> CvUnit::getNameSplit()
+{
+	// https://stackoverflow.com/questions/41741331/how-to-split-a-wstring
+	std::wstring wStr = getNameNoDesc();
+
+	std::vector<CvWString> result;
+
+	std::wstring st = L"";
+	for (int i = 0; i < wStr.length(); i++) {
+
+		if (wStr[i] == L' ') {
+			if (st.length() > 0) {
+				result.push_back(st);
+			}
+			st = L"";
+		}
+		else {
+			st += wStr[i];
+		}
+	}
+
+	if (st.length() > 0) {
+		result.push_back(st);
+	}
+
+	return result;
+}
+
 const CvWString CvUnit::getNameAndProfession() const
 {
 	CvWString szText;

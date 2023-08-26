@@ -939,9 +939,99 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 	{
 		std::vector<CvTradeRoute*> aiRoutes;
 		kOwner.getTradeRoutes(aiRoutes);
+
+		// My code.
+
+		std::vector<CvWString> allNames;
+
+		for (int u = 0; u < getNumUnits(); u++) {
+			CvUnit* unit = getUnitAt(u);
+
+			std::vector<CvWString> names = unit->getNameSplit();
+
+			// https://www.delftstack.com/howto/cpp/append-vector-to-vector-cpp/
+			allNames.insert(allNames.end(), names.begin(), names.end());
+		}
+
+		// My code end.
+
+		// My debug.
+
+		//CvWStringBuffer buffer;
+
+		//buffer.append("List of trade routs\n");
+
+		//for (uint i = 0; i < aiRoutes.size(); ++i)
+		//{
+		//	wchar lineBuffer[1024];
+
+		//	CvTradeRoute* route = aiRoutes[i];
+
+		//	CvCity* s_city = ::getCity(route->getSourceCity());
+		//	CvCity* d_city = ::getCity(route->getDestinationCity());
+
+		//	CvWString s_city_name;
+		//	CvWString d_city_name;
+
+		//	if (s_city != NULL)
+		//		s_city_name = s_city->getName();
+		//	else
+		//		s_city_name = CvWString("non");
+
+		//	if (d_city != NULL)
+		//		d_city_name = d_city->getName();
+		//	else
+		//		d_city_name = CvWString("non");
+
+		//	YieldTypes yeldType = route->getYield();
+
+		//	swprintf(lineBuffer, L"Route %s -> %s, yield: %d\n", s_city_name.GetCString(), d_city_name.GetCString(), yeldType);
+
+		//	buffer.append(lineBuffer);
+		//}
+
+		//for (size_t n = 0; n < allNames.size(); n++) {
+		//	buffer.append(allNames[n].GetCString());
+		//	buffer.append(",");
+		//}
+
+		//gDLL->MessageBox(CvString(CvWString(buffer.getCString())), "Auto trade info");
+
+		// My debug end.
+
 		for (uint i = 0; i < aiRoutes.size(); ++i)
 		{
 			CvTradeRoute* pRoute = aiRoutes[i];
+
+			// My code.
+
+			if (isHuman()) {
+
+				CvCity* kmh_pSourceCity = ::getCity(pRoute->getSourceCity());
+				CvCity* kmh_pDestinationCity = ::getCity(pRoute->getDestinationCity());
+
+				bool foundSourceName = false;
+				for (size_t j = 0; j < allNames.size(); j++) {
+					if (allNames[j] == kmh_pSourceCity->getName()) {
+						foundSourceName = true;
+					}
+				}
+
+				bool foundDestinationName = false;
+				for (size_t k = 0; k < allNames.size(); k++) {
+					if (kmh_pDestinationCity != NULL && allNames[k] == kmh_pDestinationCity->getName()) {
+						foundDestinationName = true;
+					}
+				}
+
+				if (!(foundSourceName && foundDestinationName)) {
+					continue;
+				}
+
+				//gDLL->MessageBox("Treate route is available.", "Auto trade info");
+			}
+
+			// My code end.
 
 			// transport feeder - start - Nightinggale
 			CvCity* pDestinationCity = ::getCity(pRoute->getDestinationCity());
