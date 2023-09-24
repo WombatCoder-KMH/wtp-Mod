@@ -10,6 +10,7 @@ import BuildingAdvisor
 import DomesticDemandAdvisor
 import HappinessAdvisor
 import ImportExportAdvisor
+import ImportExportExtAdvisor
 import ProductionAdvisor
 import NativeAdvisor
 import WarehouseAdvisor
@@ -139,6 +140,7 @@ class CvDomesticAdvisor:
 		self.WAREHOUSE_STATE          = self.addButton("WareHouseState",         "INTERFACE_STORES_BUTTON"           , WarehouseAdvisor.WarehouseAdvisor(self))
 		self.BUILDING_STATE           = self.addButton("BuildingState",          "INTERFACE_CITY_BUILD_BUTTON"       , BuildingAdvisor.BuildingAdvisor(self))
 		self.IMPORTEXPORT_STATE       = self.addButton("ImportExportState",      "INTERFACE_CITY_GOVENOR_BUTTON"     , ImportExportAdvisor.ImportExportAdvisor(self))
+		self.IMPORTEXPORT_EXT_STATE   = self.addButton("ImportExportExtState",   "INTERFACE_CITY_GOVENOR_BUTTON"     , ImportExportExtAdvisor.ImportExportExtAdvisor(self))		
 		self.CITIZEN_STATE            = self.addButton("CitizenState",           "INTERFACE_CITY_CITIZEN_BUTTON")
 		self.TOTAL_PRODUCTION_STATE   = self.addButton("TotalProductionState",   "INTERFACE_TOTAL_PRODUCTION_BUTTON")  # total production page - Nightinggale
 		self.TRADEROUTE_STATE         = self.addButton("TradeRouteState",        "INTERFACE_IMPORT_EXPORT_BUTTON")
@@ -251,8 +253,7 @@ class CvDomesticAdvisor:
 			screen.setTableColumnHeader( PageName + "ListBackground", 2, "<font=2>" + "MAX" + "</font>", self.iWareHouseW)
 		
 		# Headers for pages showing yields
-		for iState in [self.PRODUCTION_STATE, self.IMPORTEXPORT_STATE, self.TOTAL_PRODUCTION_STATE]: # total production page - Nightinggale
-			self.YieldPages.add(iState)
+		for iState in [self.PRODUCTION_STATE, self.IMPORTEXPORT_STATE, self.IMPORTEXPORT_EXT_STATE, self.TOTAL_PRODUCTION_STATE]: # total production page - Nightinggale			self.YieldPages.add(iState)
 			for iYield in range(YieldTypes.YIELD_FOOD, YieldTypes.YIELD_LUXURY_GOODS + 1):
 				iYieldOnPage = iYield % self.MAX_YIELDS_IN_A_PAGE
 				iPage = iYield // self.MAX_YIELDS_IN_A_PAGE
@@ -525,7 +526,7 @@ class CvDomesticAdvisor:
 					if iIconBuilding != -1:
 						screen.setTableInt(szState + "ListBackground", iSpecial - start  + 2, i, "", gc.getBuildingInfo(iBuilding).getButton(), WidgetTypes.WIDGET_PEDIA_JUMP_TO_BUILDING, iBuilding, -1, CvUtil.FONT_LEFT_JUSTIFY )
 						
-		elif(self.CurrentState == self.IMPORTEXPORT_STATE):
+		elif(self.CurrentState == self.IMPORTEXPORT_STATE or self.CurrentState == self.IMPORTEXPORT_EXT_STATE):
 			start = self.YieldStart()
 			for iYield in range(start, self.YieldEnd()):
 				bExportYield = pLoopCity.isExport(iYield)
@@ -990,6 +991,8 @@ class CvDomesticAdvisor:
 				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_CITIZEN", ())
 			elif iData1 == self.IMPORTEXPORT_STATE:
 				return localText.getText("TXT_KEY_CONCEPT_TRADE_ROUTE", ())
+			elif iData1 == self.IMPORTEXPORT_EXT_STATE:
+				return localText.getText("TXT_KEY_CONCEPT_TRADE_ROUTE", ()) # TODO KMH
 			# total production page - start - Nightinggale
 			elif iData1 == self.TOTAL_PRODUCTION_STATE:
 				return localText.getText("TXT_KEY_CONCEPT_TOTAL_PRODUCTION", ())

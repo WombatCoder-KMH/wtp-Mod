@@ -133,5 +133,8 @@ void CyCityPythonInterface5(python::class_<CyCity>& x)
 
 		.def("isOrderWaitingForYield", &CyCity::isOrderWaitingForYield, "python::tuple isOrderWaitingForYield(int /*YieldTypes*/ eYield)")
 		.def("getCenterPlotTerrainType", &CyCity::getCenterPlotTerrainType, "int /*TerrainTypes*/ getCenterPlotTerrainType()")// WTP, ray, Center Plot specific Backgrounds - Start
+		.def("setImportsLimit", &CyCity::setImportsLimit, "void setImportsLimit(int /*YieldTypes*/ eYield, int iValue)")
+		.def("togleTrade", &CyCity::togleTrade, "void togleTrade(int pCityId, int /*YieldTypes*/ eYield)") 
+		.def("togleDomestigTrade", &CyCity::togleDomestigTrade, "void togleDomestigTrade()") 
 		;
 }

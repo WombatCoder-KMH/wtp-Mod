@@ -1622,3 +1622,26 @@ int /*TerrainTypes*/ CyCity::getCenterPlotTerrainType() const
 }
 // WTP, ray, Center Plot specific Backgrounds - END
 
+void CyCity::setImportsLimit(int /*YieldTypes*/ eYield, int iValue)
+{
+	if (m_pCity != NULL)
+	{
+//		m_pCity->setImportsLimit((YieldTypes) eYield, iValue);
+	}
+}
+
+void CyCity::togleTrade(int pCityId, int /*YieldTypes*/ eYield)
+{
+	if (m_pCity != NULL)
+	{
+		m_pCity->togleTrade(pCityId, (YieldTypes) eYield);
+	}
+}
+
+void CyCity::togleDomestigTrade()
+{
+	if (m_pCity != NULL)
+	{
+		m_pCity->togleDomestigTrade();
+	}
+}

@@ -14457,3 +14457,285 @@ TerrainTypes CvCity::getCenterPlotTerrainType() const
 }
 // WTP, ray, Center Plot specific Backgrounds - END
 
+void CvCity::togleTrade(int pCityId, YieldTypes eYield)
+{
+	// Note: has to match code in CvCity::handleAutoTraderouteSetup
+
+	CvPlayer& kPlayer = GET_PLAYER(GC.getGameINLINE().getActivePlayer());
+	CvCity* pCity = kPlayer.getCity(pCityId);
+	if (pCity != NULL)
+	{
+		if (GC.getYieldInfo(eYield).isCargo())
+		{
+			bool bImport          = 0;
+			bool bExport          = 0;
+			bool bMaintainImport  = 0;
+			bool bAutoExport      = 0;
+			int iImportLimitLevel = 0;
+			int iMaintainLevel    = 0;
+
+			if (0 == pCity->isImport(eYield)
+				&& 0 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 0 == pCity->getImportsLimit(eYield)
+				&& 0 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 0;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 0;
+				iMaintainLevel    = 0;
+			}
+			else if (0 == pCity->isImport(eYield)
+				&& 1 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 0 == pCity->getImportsLimit(eYield)
+				&& 0 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 0;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 100;
+				iMaintainLevel    = 100;
+			}
+			else if (0 == pCity->isImport(eYield)
+				&& 1 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 100 == pCity->getImportsLimit(eYield)
+				&& 100 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 1;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 100;
+				iMaintainLevel    = 100;
+			}
+			else if (1 == pCity->isImport(eYield)
+				&& 1 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 100 == pCity->getImportsLimit(eYield)
+				&& 100 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 1;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 300;
+				iMaintainLevel    = 300;
+			}
+			else if (1 == pCity->isImport(eYield)
+				&& 1 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 300 == pCity->getImportsLimit(eYield)
+				&& 300 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 1;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 800;
+				iMaintainLevel    = 300;
+			}
+			else if (1 == pCity->isImport(eYield)
+				&& 1 == pCity->isExport(eYield)
+				&& 0 == pCity->getImportsMaintain(eYield)
+				&& 0 == pCity->isAutoExport(eYield)
+				&& 800 == pCity->getImportsLimit(eYield)
+				&& 300 == pCity->getMaintainLevel(eYield)
+				)
+			{
+				bImport          = 1;
+				bExport          = 1;
+				bMaintainImport  = 0;
+				bAutoExport      = 0;
+				iImportLimitLevel = 800;
+				iMaintainLevel    = 100;
+			}
+
+			if (bImport != pCity->isImport(eYield)
+				|| bExport != pCity->isExport(eYield)
+				|| bMaintainImport != pCity->getImportsMaintain(eYield)
+				|| bAutoExport != pCity->isAutoExport(eYield)
+				|| iMaintainLevel != pCity->getMaintainLevel(eYield)
+				|| iImportLimitLevel != pCity->getImportsLimit(eYield)
+				)
+			{
+				NetworkDataTradeRouteInts buffer;
+				buffer.iImportLimitLevel = iImportLimitLevel;
+				buffer.iMaintainLevel    = iMaintainLevel;
+
+				gDLL->sendDoTask(pCityId, TASK_YIELD_TRADEROUTE, eYield, buffer.iNetwork, bImport, bExport, bMaintainImport, bAutoExport);
+			}
+		}
+	}
+}
+
+void CvCity::togleDomestigTrade()
+{
+	// Note: has to match code in CvCity::handleAutoTraderouteSetup
+
+	const InfoArray<YieldTypes>& kYieldArray = GC.getDomesticDemandYieldTypes();
+
+	bool bImport          = 0;
+	bool bExport          = 0;
+	bool bMaintainImport  = 0;
+	bool bAutoExport      = 0;
+	int iImportLimitLevel = 0;
+	int iMaintainLevel    = 0;
+
+	bool allDomesticIsEqual = true;
+
+	for (int i = 0; i < kYieldArray.getLength(); ++i)
+	{
+		const YieldTypes eYield = kYieldArray.get(i);
+
+		if (i == 0) {
+			bImport = isImport(eYield);
+			bExport = isExport(eYield);
+			bMaintainImport = getImportsMaintain(eYield);
+			bAutoExport = isAutoExport(eYield);
+			iImportLimitLevel = getImportsLimit(eYield);
+			iMaintainLevel = getMaintainLevel(eYield);
+		} else {
+			allDomesticIsEqual = allDomesticIsEqual
+			&& bImport == isImport(eYield)
+			&& bExport == isExport(eYield)
+			&& bMaintainImport == getImportsMaintain(eYield)
+			&& bAutoExport == isAutoExport(eYield)
+			&& iImportLimitLevel == getImportsLimit(eYield)
+			&& iMaintainLevel == getMaintainLevel(eYield);
+		}
+	}
+
+		if (!allDomesticIsEqual) {
+			bImport           = 0;
+			bExport           = 0;
+			bMaintainImport   = 0;
+			bAutoExport       = 0;
+			iImportLimitLevel = 0;
+			iMaintainLevel    = 0;
+		}
+		else if (0 == bImport
+			&& 0 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 0 == iImportLimitLevel
+			&& 0 == iMaintainLevel
+			)
+		{
+			bImport          = 0;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 0;
+			iMaintainLevel    = 0;
+		}
+		else if (0 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 0 == iImportLimitLevel
+			&& 0 == iMaintainLevel
+			)
+		{
+			bImport          = 0;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 100;
+			iMaintainLevel    = 100;
+		}
+		else if (0 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 100 == iImportLimitLevel
+			&& 100 == iMaintainLevel
+			)
+		{
+			bImport          = 1;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 100;
+			iMaintainLevel    = 100;
+		}
+		else if (1 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 100 == iImportLimitLevel
+			&& 100 == iMaintainLevel
+			)
+		{
+			bImport          = 1;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 300;
+			iMaintainLevel    = 300;
+		}
+		else if (1 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 300 == iImportLimitLevel
+			&& 300 == iMaintainLevel
+			)
+		{
+			bImport          = 1;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 800;
+			iMaintainLevel    = 300;
+		}
+		else if (1 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 800 == iImportLimitLevel
+			&& 300 == iMaintainLevel
+			)
+		{
+			bImport          = 1;
+			bExport          = 1;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 800;
+			iMaintainLevel    = 100;
+		}
+
+	for (int i = 0; i < kYieldArray.getLength(); ++i)
+	{
+		const YieldTypes eYield = kYieldArray.get(i);
+
+		if (bImport != isImport(eYield)
+			|| bExport != isExport(eYield)
+			|| bMaintainImport != getImportsMaintain(eYield)
+			|| bAutoExport != isAutoExport(eYield)
+			|| iMaintainLevel != getMaintainLevel(eYield)
+			|| iImportLimitLevel != getImportsLimit(eYield)
+			)
+		{
+			NetworkDataTradeRouteInts buffer;
+			buffer.iImportLimitLevel = iImportLimitLevel;
+			buffer.iMaintainLevel    = iMaintainLevel;
+
+			gDLL->sendDoTask(getID(), TASK_YIELD_TRADEROUTE, eYield, buffer.iNetwork, bImport, bExport, bMaintainImport, bAutoExport);
+		}
+	}
+}

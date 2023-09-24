@@ -1062,6 +1062,9 @@ public:
 
 	int getMaxImportAmount(YieldTypes eYield) const;
 
+	void togleTrade(int pCityId, YieldTypes eYield);
+	void togleDomestigTrade();
+	
 protected:
 	int m_iOppressometer;
 	int m_iOppressometerGrowthModifier;

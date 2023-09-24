@@ -378,6 +378,10 @@ public:
 	int /*TerrainTypes*/ getCenterPlotTerrainType() const;
 	// WTP, ray, Center Plot specific Backgrounds - END
 
+	void setImportsLimit(int /*YieldTypes*/ eYield, int iValue);
+	void togleTrade(int pCityId, int /*YieldTypes*/ eYield);
+	void togleDomestigTrade();
+
 private:
 	CvCity* m_pCity;
 };
