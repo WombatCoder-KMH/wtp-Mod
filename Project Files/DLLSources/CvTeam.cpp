@@ -2531,7 +2531,7 @@ void CvTeam::testFoundingFather()
 			}
 			else //AI
 			{
-				convinceFather(eFather, true);
+//				convinceFather(eFather, true);
 			}
 		}
 	}
