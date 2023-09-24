@@ -14718,6 +14718,21 @@ void CvCity::togleDomestigTrade()
 			iImportLimitLevel = 800;
 			iMaintainLevel    = 100;
 		}
+		else if (1 == bImport
+			&& 1 == bExport
+			&& 0 == bMaintainImport
+			&& 0 == bAutoExport
+			&& 800 == iImportLimitLevel
+			&& 100 == iMaintainLevel
+			)
+		{
+			bImport          = 0;
+			bExport          = 0;
+			bMaintainImport  = 0;
+			bAutoExport      = 0;
+			iImportLimitLevel = 0;
+			iMaintainLevel    = 0;
+		}
 
 	for (int i = 0; i < kYieldArray.getLength(); ++i)
 	{
