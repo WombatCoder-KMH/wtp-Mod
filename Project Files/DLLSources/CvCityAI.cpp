@@ -2853,6 +2853,8 @@ bool CvCityAI::AI_chooseBuilding(int iFocusFlags, int iMaxTurns, int iMinThresho
 //TAC - AI produces FF Points - koma13 - START
 bool CvCityAI::AI_chooseConvince()
 {
+	return false; // Disabled AI Convince
+
 	if (GET_PLAYER(getOwnerINLINE()).getParent() == NO_PLAYER)
 	{
 		return false;
