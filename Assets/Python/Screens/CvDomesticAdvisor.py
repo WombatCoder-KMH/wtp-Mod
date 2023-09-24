@@ -1,6 +1,7 @@
 ## Sid Meier's Civilization 4
 ## Copyright Firaxis Games 2005
 from CvPythonExtensions import *
+import time
 import CvUtil
 import ScreenInput
 import CvScreenEnums
@@ -52,6 +53,7 @@ class CvDomesticAdvisor:
 		
 	# Screen construction function
 	def interfaceScreen(self):
+		CvUtil.pyPrint("CvDomesticAdvisor.interfaceScreen start: " + str(time.clock()))
 		player = gc.getPlayer(gc.getGame().getActivePlayer())
 
 		# Create a new screen, called DomesticAdvisur, using the file CvDomesticAdvisor.py for input
@@ -275,6 +277,7 @@ class CvDomesticAdvisor:
 		
 		# Draw the city list...
 		self.drawContents()
+		CvUtil.pyPrint("CvDomesticAdvisor.interfaceScreen end: " + str(time.clock()))
 		
 	def drawButtons(self):
 		screen = CyGInterfaceScreen( "DomesticAdvisor", CvScreenEnums.DOMESTIC_ADVISOR )
@@ -761,6 +764,7 @@ class CvDomesticAdvisor:
 							SelectionState = True
 							
 	def RebuildArrays (self):
+		CvUtil.pyPrint("CvDomesticAdvisor.RebuildArrays start: " + str(time.clock()))
 		self.NativeCities = []
 		
 		if 'stateWindow' in dir(self):
@@ -787,16 +791,19 @@ class CvDomesticAdvisor:
 				self.Transports.append(SelectionGroup)
 			SelectionGroup, Iterator = player.nextSelectionGroup(Iterator, false)
 
-		self.RouteValidity = []
-		for iTransport in range(len(self.Transports)):
-			Transport = self.Transports[iTransport]
-			RouteValidArray = []
-			bReusePath = false
-			for Route in self.Routes:
-				RouteValidArray.append(Transport.canAssignTradeRoute(Route.getID(), bReusePath))
-				bReusePath = true
-			self.RouteValidity.append(RouteValidArray)
+		CvUtil.pyPrint("CvDomesticAdvisor.RebuildArrays 4: " + str(time.clock()))
+
+#		self.RouteValidity = []
+#		for iTransport in range(len(self.Transports)):
+#			Transport = self.Transports[iTransport]
+#			RouteValidArray = []
+#			bReusePath = false
+#			for Route in self.Routes:
+#				RouteValidArray.append(Transport.canAssignTradeRoute(Route.getID(), bReusePath))
+#				bReusePath = true
+#			self.RouteValidity.append(RouteValidArray)
 		
+		CvUtil.pyPrint("CvDomesticAdvisor.RebuildArrays end: " + str(time.clock()))
 		
 	def GetNativeCities(self):
 		# R&R, Robert Surcouf,  Domestic Advisor Screen - Start
