@@ -185,5 +185,6 @@ void CyUnitPythonInterface2(python::class_<CyUnit>& x)
 		.def("getArtInfo", &CyUnit::getArtInfo,  python::return_value_policy<python::reference_existing_object>(), "CvArtInfoUnit* (int i)")
 		.def("getButton", &CyUnit::getButton, "std::string ()")
 		.def("getFullLengthIcon", &CyUnit::getFullLengthIcon, "std::string ()")
+		.def("select", &CyUnit::select, "void select(bool val1, bool val2, bool val3)")
 		;
 }

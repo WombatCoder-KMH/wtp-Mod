@@ -835,6 +835,8 @@ public:
 	bool isBarbarianUnitOnAdjacentPlotOfUnit(int /*UnitClassTypes*/ iIndex) const;
 	// WTP, ray, helper methods for Python Event System - Spawning Units and Barbarians on Plots - END
 
+	void select(bool val1, bool val2, bool val3);
+
 protected:
 
 	void updateVisibilityCache(int iNewRange);

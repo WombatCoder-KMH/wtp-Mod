@@ -16733,3 +16733,11 @@ int CvUnit::getDiscriminationFactor() const
 	}
 	return 0;
 }
+
+void CvUnit::select(bool val1, bool val2, bool val3) {
+	gDLL->getInterfaceIFace()->selectUnit(this, val1, val2, val3);
+	gDLL->getInterfaceIFace()->lookAtSelectionPlot();
+//	GC.getGame().selectUnit(this, val1, val2, val3);
+//	GC.getGame().lookAtSelectionPlot();
+}
+

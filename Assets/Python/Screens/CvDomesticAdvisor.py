@@ -15,6 +15,7 @@ import ProductionAdvisor
 import NativeAdvisor
 import WarehouseAdvisor
 import TeacherAdvisor
+import TradeRouteExtAdvisor
 import DebugTerrainAdvisor
 
 
@@ -144,6 +145,7 @@ class CvDomesticAdvisor:
 		self.CITIZEN_STATE            = self.addButton("CitizenState",           "INTERFACE_CITY_CITIZEN_BUTTON")
 		self.TOTAL_PRODUCTION_STATE   = self.addButton("TotalProductionState",   "INTERFACE_TOTAL_PRODUCTION_BUTTON")  # total production page - Nightinggale
 		self.TRADEROUTE_STATE         = self.addButton("TradeRouteState",        "INTERFACE_IMPORT_EXPORT_BUTTON")
+		self.TRADEROUTE_EXT_STATE     = self.addButton("TradeRouteExtState",     "INTERFACE_IMPORT_EXPORT_BUTTON"    , TradeRouteExtAdvisor.TradeRouteExtAdvisor(self))
 		self.TEACHER_STATE            = self.addButton("TeacherState",           "INTERFACE_TEACHER_LIST"            , TeacherAdvisor.TeacherAdvisor(self))
 		self.NATIVE_STATE             = self.addButton("NativeState",            "INTERFACE_NATIVE_BUTTON"           , NativeAdvisor.NativeAdvisor(self))
 		

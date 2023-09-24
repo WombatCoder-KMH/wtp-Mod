@@ -306,6 +306,8 @@ public:
 	std::string getFullLengthIcon() const;
 	// Python Helper Functions
 	void centerCamera();
+
+	void select(bool val1, bool val2, bool val3);
 protected:
 	CvUnit* m_pUnit;
 };

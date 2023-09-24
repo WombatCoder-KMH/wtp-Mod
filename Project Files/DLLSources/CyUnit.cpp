@@ -1196,3 +1196,9 @@ std::string CyUnit::getFullLengthIcon() const
 {
 	return m_pUnit ? m_pUnit->getFullLengthIcon() : "";
 }
+
+void CyUnit::select(bool val1, bool val2, bool val3)
+{
+	if (m_pUnit)
+		m_pUnit->select(val1, val2, val3);
+}
