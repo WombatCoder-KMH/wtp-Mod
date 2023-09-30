@@ -21,7 +21,7 @@ class ImportExportExtAdvisor(BaseAdvisorWindow.BaseAdvisorWindow):
 		BaseAdvisorWindow.BaseAdvisorWindow.__init__(self, parent, "ImportExportExtStateClass")
 
 	def drawColonyRowCustom(self, iCity, pCity):
-		self.tableManager.addInt("<color=255,255,0>Toggle</color>", iCity, -1, WidgetTypes.WIDGET_GENERAL)
+		self.tableManager.addInt("<color=255,255,0>Toggle</color>", iCity, -1, WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT)
 		return
 
 	def drawColonyCell(self, iCity, pCity, iYield, pYieldInfo):
@@ -31,13 +31,13 @@ class ImportExportExtAdvisor(BaseAdvisorWindow.BaseAdvisorWindow):
 		exportAmount = pCity.getMaintainLevel(iYield)
 		## R&R, Robert Surcouf,  Domestic Advisor Screen - End
 		if (bExportYield and bImportYield):
-			self.tableManager.addInt("<color=255,255,0>" + str(importAmount/100) + u"/" + str(exportAmount/100) + u"</color>", iCity, iYield, WidgetTypes.WIDGET_GENERAL)
+			self.tableManager.addInt("<color=255,255,0>" + str(importAmount/100) + u"/" + str(exportAmount/100) + u"</color>", iCity, iYield, WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT)
 		elif (not bExportYield and bImportYield):
-			self.tableManager.addInt("<color=0,255,0>" + str(importAmount/100) + u"/-" + u"</color>", iCity, iYield, WidgetTypes.WIDGET_GENERAL)
+			self.tableManager.addInt("<color=0,255,0>" + str(importAmount/100) + u"/-" + u"</color>", iCity, iYield, WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT)
 		elif (bExportYield and not bImportYield):
-			self.tableManager.addInt("<color=255,0,0>" + u"-/" + str(exportAmount/100) + u"</color>", iCity, iYield, WidgetTypes.WIDGET_GENERAL)
+			self.tableManager.addInt("<color=255,0,0>" + u"-/" + str(exportAmount/100) + u"</color>", iCity, iYield, WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT)
 		else:
-			self.tableManager.addInt("<color=255,255,255>" + u"-/-" + u"</color>", iCity, iYield, WidgetTypes.WIDGET_GENERAL)
+			self.tableManager.addInt("<color=255,255,255>" + u"-/-" + u"</color>", iCity, iYield, WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT)
 #			self.tableManager.addPanelButton(ArtFileMgr.getInterfaceArtInfo("INTERFACE_BUTTONS_CITYSELECTION").getPath(), WidgetTypes.WIDGET_GENERAL, iCity, iYield)
 #			self.tableManager.skipCell()
 
@@ -50,6 +50,11 @@ class ImportExportExtAdvisor(BaseAdvisorWindow.BaseAdvisorWindow):
 
 
 	def handleInput (self, inputClass):
+#		CvUtil.pyPrint("inputClass.getNotifyCode() " + str(inputClass.getNotifyCode()))
+#		CvUtil.pyPrint("inputClass.getButtonType() " + str(inputClass.getButtonType()))
+#		CvUtil.pyPrint("inputClass.getData1() " + str(inputClass.getData1()))
+#		CvUtil.pyPrint("inputClass.getData2() " + str(inputClass.getData2()))
+
 #		CvUtil.pyPrint("dir(NotifyCode) " + str(dir(NotifyCode)))
 #		CvUtil.pyPrint("dir(NotifyCode) " + ' '.join(list(NotifyCode)))
 #		CvUtil.pyPrint("NotifyCode.NOTIFY_CLICKED " + str(int(NotifyCode.NOTIFY_CLICKED))) # 0
@@ -62,7 +67,7 @@ class ImportExportExtAdvisor(BaseAdvisorWindow.BaseAdvisorWindow):
 #		message = "Data1: " + str(inputClass.getData1()) + " Data2: " + str(inputClass.getData2()) + " NotifyCode: " + str(inputClass.getNotifyCode()) + " ButtonType: " + str(inputClass.getButtonType())
 #		CyInterface().addImmediateMessage(message,"")
 #		CvUtil.pyPrint(message)
-		if (inputClass.getNotifyCode() == NotifyCode.NOTIFY_LISTBOX_ITEM_SELECTED and inputClass.getButtonType() == 24 and inputClass.getData1() < len(self.parent.Cities)):
+		if (inputClass.getNotifyCode() == NotifyCode.NOTIFY_LISTBOX_ITEM_SELECTED and inputClass.getButtonType() == WidgetTypes.WIDGET_CONDENSED_YIELD_IMPORT_EXPORT and inputClass.getData1() < len(self.parent.Cities)):
 #			CvUtil.pyPrint("handleInput start: " + str(time.clock()))
 #			message = "Data1: " + str(inputClass.getData1()) + " Data2: " + str(inputClass.getData2()) + " Cities len: " + str(len(self.parent.Cities))
 #			message = "City " + pCity.getName() + " " + str(pCity.getImportsLimit(iYield)) + " " + str(pCity.getMaintainLevel(iYield))
