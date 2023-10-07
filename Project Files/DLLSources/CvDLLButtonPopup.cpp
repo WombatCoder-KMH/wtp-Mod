@@ -2013,16 +2013,30 @@ bool CvDLLButtonPopup::launchEducationPopup(CvPopup* pPopup, CvPopupInfo &info)
 
 	int iNumUnits = 0;
 	UnitTypes eLastUnit = NO_UNIT;
+	CvPlot* pPlot = pCity->plot();
 	for (int iI = 0; iI < GC.getNumUnitInfos(); iI++)
 	{
 		CvUnitInfo& kUnit = GC.getUnitInfo((UnitTypes) iI);
 		int iPrice = pCity->getSpecialistTuition((UnitTypes) iI);
 		if (iPrice >= 0 && iPrice <= kPlayer.getGold())
 		{
+			int numUnitWithSpeciallity = 0;
+			for (int iU = 0; iU < pPlot->getNumUnits(); iU++)
+			{
+				CvUnit* pLoopUnit = pPlot->getUnitByIndex(iU);
+				if (pLoopUnit->getUnitType() == iI)
+				{
+					numUnitWithSpeciallity++;
+				}
+			}
+			
+//			szText.Format(L"%s", kUnit.getDescription(), numUnitWithSpeciallity); // TODO KMH: Add number of units already in city/outside city
 			szText.Format(L"%s", kUnit.getDescription());
+			szText += CvWString::format(L" (%d)", numUnitWithSpeciallity);
 			if (iPrice > 0)
 			{
-				szText += CvWString::format(L" (%d%c)", iPrice, GC.getSymbolID(GOLD_CHAR));
+//				szText += CvWString::format(L" (%d%c)", iPrice, GC.getSymbolID(GOLD_CHAR));
+				szText += CvWString::format(L" (%d) (%d%c)", numUnitWithSpeciallity, iPrice, GC.getSymbolID(GOLD_CHAR));
 			}
 			gDLL->getInterfaceIFace()->popupAddGenericButton(pPopup, szText, kUnit.getButton(), iI, WIDGET_GENERAL, -1, -1, true, POPUP_LAYOUT_STRETCH, DLL_FONT_LEFT_JUSTIFY);
 			++iNumUnits;
