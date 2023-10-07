@@ -711,7 +711,7 @@ class CvDomesticAdvisor:
 				sign = u"+"
 				line_name = "Production"
 			if i == 1:
-				line_name = "Demand (demestic)"
+				line_name = "Demand (domestic)"
 			if i == 2:
 				line_name = "Demand meet"
 			if i == 3:
