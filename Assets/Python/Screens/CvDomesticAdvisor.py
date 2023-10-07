@@ -704,12 +704,20 @@ class CvDomesticAdvisor:
 		szState = self.StatePages[self.CurrentState][self.CurrentPage]
 		start = self.YieldStart()
 		
-		for i in range(0,2):
+		for i in range(0,7):
 			sign = ""
 			line_name = "Warehouse"
 			if i == 0:
 				sign = u"+"
 				line_name = "Production"
+			if i == 1:
+				line_name = "Demand (demestic)"
+			if i == 2:
+				line_name = "Demand meet"
+			if i == 3:
+				line_name = "Demand value"
+			if i == 4:
+				line_name = "Demand meet value"
 			screen.setTableText(szState + "ListBackground", 0, i, "<font=2>" +""         + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
 			screen.setTableText(szState + "ListBackground", 1, i, "<font=2>" + line_name + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
 			for iYield in range(start, self.YieldEnd()):
@@ -717,7 +725,19 @@ class CvDomesticAdvisor:
 				if i == 0:
 					for iCity in range(len(self.Cities)):
 						iNetYield += self.Cities[iCity].calculateNetYield(iYield)
-				else:
+				elif i == 1:
+					for iCity in range(len(self.Cities)):
+						iNetYield += self.Cities[iCity].getYieldDemand(iYield)
+				elif i == 2:
+					for iCity in range(len(self.Cities)):
+						iNetYield += min(self.Cities[iCity].getYieldDemand(iYield), self.Cities[iCity].getYieldStored(iYield) + self.Cities[iCity].calculateNetYield(iYield))
+				elif i == 3:
+					for iCity in range(len(self.Cities)):
+						iNetYield += self.Cities[iCity].getYieldDemand(iYield) * self.Cities[iCity].getYieldBuyPrice(iYield)
+				elif i == 4:
+					for iCity in range(len(self.Cities)):
+						iNetYield += min(self.Cities[iCity].getYieldDemand(iYield), self.Cities[iCity].getYieldStored(iYield) + self.Cities[iCity].calculateNetYield(iYield)) * self.Cities[iCity].getYieldBuyPrice(iYield)
+				elif i == 5:
 					for iCity in range(len(self.Cities)):
 						iNetYield += self.Cities[iCity].getYieldStored(iYield)
 				szText = unicode(iNetYield)
@@ -1059,7 +1079,7 @@ class CvDomesticAdvisor:
 			screen.setTableColumnHeader(szStateName, 1, "<font=2>" + localText.getText("TXT_KEY_DOMESTIC_ADVISOR_NAME", ()).upper() + "</font>", self.CITY_NAME_COLUMN_WIDTH - 56 )
 
 			# total production page - start - Nightinggale
-			num_cities = 2
+			num_cities = 6
 			
 			if iState != self.TOTAL_PRODUCTION_STATE:
 				num_cities = len(self.Cities)
