@@ -855,7 +855,31 @@
 	</Define>
 	<Define>
 		<DefineName>DOMESTIC_SALES_MESSAGES</DefineName>
-		<iDefineIntVal>1</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>OUT_OF_RESOURECES_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>STUDENDS_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>CONSTRUCTION_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>GOLD_BY_ENTERTAINMEN_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>CITY_GROWTH_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>ALMOST_NO_RAW_MESSAGES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>DOMESTIC_MARKET_SCREEN_START_YIELD_ID</DefineName>

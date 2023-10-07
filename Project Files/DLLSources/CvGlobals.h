@@ -675,6 +675,13 @@ public:
 	// Domestic Market
 	int getPRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS();
 	int getDOMESTIC_SALES_MESSAGES();
+	// Mesages options
+	int getOUT_OF_RESOURECES_MESSAGES();
+	int getSTUDENDS_MESSAGES();
+	int getCONSTRUCTION_MESSAGES();
+	int getGOLD_BY_ENTERTAINMEN_MESSAGES();
+	int getCITY_GROWTH_MESSAGES();
+	int getALMOST_NO_RAW_MESSAGES();
 	// Wild Animals
 	int getWILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT();
 	int getWILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT();
@@ -1255,6 +1262,13 @@ protected:
 	// Domestic Market
 	int m_PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS;
 	int m_DOMESTIC_SALES_MESSAGES;
+	// Mesages options
+	int m_OUT_OF_RESOURECES_MESSAGES;
+	int m_STUDENDS_MESSAGES;
+	int m_CONSTRUCTION_MESSAGES;
+	int m_GOLD_BY_ENTERTAINMEN_MESSAGES;
+	int m_CITY_GROWTH_MESSAGES;
+	int m_ALMOST_NO_RAW_MESSAGES;
 	// Wild Animals
 	int m_WILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT;
 	int m_WILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT;
@@ -1832,6 +1846,33 @@ inline int CvGlobals::getDOMESTIC_SALES_MESSAGES()
 {
 	return m_DOMESTIC_SALES_MESSAGES;
 }
+
+// Mesages options
+inline int CvGlobals::getOUT_OF_RESOURECES_MESSAGES()
+{
+	return m_OUT_OF_RESOURECES_MESSAGES;
+}
+inline int CvGlobals::getSTUDENDS_MESSAGES()
+{
+	return m_STUDENDS_MESSAGES;
+}
+inline int CvGlobals::getCONSTRUCTION_MESSAGES()
+{
+	return m_CONSTRUCTION_MESSAGES;
+}
+inline int CvGlobals::getGOLD_BY_ENTERTAINMEN_MESSAGES()
+{
+	return m_GOLD_BY_ENTERTAINMEN_MESSAGES;
+}
+inline int CvGlobals::getCITY_GROWTH_MESSAGES()
+{
+	return m_CITY_GROWTH_MESSAGES;
+}
+inline int CvGlobals::getALMOST_NO_RAW_MESSAGES()
+{
+	return m_ALMOST_NO_RAW_MESSAGES;
+}
+
 // Wild Animals
 
 inline int CvGlobals::getWILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT()
