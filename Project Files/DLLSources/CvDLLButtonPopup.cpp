@@ -2030,12 +2030,10 @@ bool CvDLLButtonPopup::launchEducationPopup(CvPopup* pPopup, CvPopupInfo &info)
 				}
 			}
 			
-//			szText.Format(L"%s", kUnit.getDescription(), numUnitWithSpeciallity); // TODO KMH: Add number of units already in city/outside city
 			szText.Format(L"%s", kUnit.getDescription());
 			szText += CvWString::format(L" (%d)", numUnitWithSpeciallity);
 			if (iPrice > 0)
 			{
-//				szText += CvWString::format(L" (%d%c)", iPrice, GC.getSymbolID(GOLD_CHAR));
 				szText += CvWString::format(L" (%d%c)", iPrice, GC.getSymbolID(GOLD_CHAR));
 			}
 			gDLL->getInterfaceIFace()->popupAddGenericButton(pPopup, szText, kUnit.getButton(), iI, WIDGET_GENERAL, -1, -1, true, POPUP_LAYOUT_STRETCH, DLL_FONT_LEFT_JUSTIFY);
