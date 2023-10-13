@@ -884,12 +884,12 @@
 	<Define>
 		<!-- Up keep of first funding father in a category pr. population -->
 		<DefineName>FUNDING_FARTHER_UPKEEP_START</DefineName>
-		<fDefineFloatVal>0.001</fDefineFloatVal>
+		<fDefineFloatVal>0.0001</fDefineFloatVal>
 	</Define>
 	<Define>
 		<!-- Up keep of last funding father in a category pr. population -->
 		<DefineName>FUNDING_FARTHER_UPKEEP_END</DefineName>
-		<fDefineFloatVal>10.0</fDefineFloatVal>
+		<fDefineFloatVal>2.0</fDefineFloatVal>
 	</Define>
 	<Define>
 		<DefineName>FUNDING_FARTHER_UPKEEP_EXPLORATION_FACTOR</DefineName>
