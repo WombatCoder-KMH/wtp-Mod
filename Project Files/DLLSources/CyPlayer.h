@@ -158,6 +158,8 @@ public:
 	int getPopScore();
 	int getLandScore();
 	int getFatherScore();
+	int calculateFundingFartherUpKeep(int fatherCategory);
+	int calculateNextFundingFartherUpKeep(int fatherCategory);
 	int getTotalTimePlayed();
 	bool isAlive();
 	bool isEverAlive();

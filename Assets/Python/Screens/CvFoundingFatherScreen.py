@@ -182,11 +182,33 @@ class CvFoundingFatherScreen:
 		screen = self.getScreen()
 		activeTeam = gc.getTeam(gc.getPlayer(self.iCivSelected).getTeam())
 	
+		# Calculate number of own funding fathers by category
+		iOwnFathersByCategory = []
+		for iCategory in range(gc.getNumFatherCategoryInfos()):
+			iOwnFathersByCategory.append(0)
+		for iFather in range(gc.getNumFatherInfos()):
+			if (gc.getGame().getFatherTeam(iFather) == activeTeam.getID()):
+				iOwnFathersByCategory[gc.getFatherInfo(iFather).getFatherCategory()] += 1
+
+		# Calculate upkeep for each fater category
+		iFathersUpkeepByCategory = []
+		for iCategory in range(gc.getNumFatherCategoryInfos()):
+			iFathersUpkeepByCategory.append(gc.getPlayer(self.iCivSelected).calculateFundingFartherUpKeep(iCategory))
+
+		# Calculate upkeep for next fater in category
+		iFathersNextUpkeepByCategory = []
+		for iCategory in range(gc.getNumFatherCategoryInfos()):
+			iFathersNextUpkeepByCategory.append(gc.getPlayer(self.iCivSelected).calculateNextFundingFartherUpKeep(iCategory))
+
 		for iCategory in range(gc.getNumFatherCategoryInfos()):
 			screen.addDDSGFCAt("PointBox" + str(iCategory), "FoundingFatherList" + str(iCategory), ArtFileMgr.getInterfaceArtInfo("INTERFACE_EUROPE_SHADOW_BOX").getPath(), 25, self.YResolution - 300, 120 , (24 * 6), WidgetTypes.WIDGET_GENERAL, -1, -1, False )
 			for iFatherPoint in range(gc.getNumFatherPointInfos()):
 				szTotal = u"%c  %i" % (gc.getFatherPointInfo(iFatherPoint).getChar(), activeTeam.getFatherPoints(iFatherPoint))
-				screen.setTextAt("PointTotal" + str(iCategory + iFatherPoint * gc.getNumFatherCategoryInfos()), "FoundingFatherList" + str(iCategory), u"<font=3b>" + szTotal + u"</font>", CvUtil.FONT_LEFT_JUSTIFY, 40, self.YResolution - 300 + (24 * (iFatherPoint + 1)), -0.1, FontTypes.SMALL_FONT, WidgetTypes.WIDGET_GENERAL, -1, -1 )
+
+				upKeepText = localText.getText("TXT_KEY_FUNDING_FATHER_CATEGORY_UP_KEEP_AND_NEXT_UP_KEEP", (iFathersUpkeepByCategory[iFatherPoint], iFathersNextUpkeepByCategory[iFatherPoint]))
+
+#				screen.setTextAt("PointTotal" + str(iCategory + iFatherPoint * gc.getNumFatherCategoryInfos()), "FoundingFatherList" + str(iCategory), u"<font=3b>" + szTotal + u" (" + str(iOwnFathersByCategory[iFatherPoint]) + ") TODO Add father upkeep info</font>", CvUtil.FONT_LEFT_JUSTIFY, 40, self.YResolution - 300 + (24 * (iFatherPoint + 1)), -0.1, FontTypes.SMALL_FONT, WidgetTypes.WIDGET_GENERAL, -1, -1 )
+				screen.setTextAt("PointTotal" + str(iCategory + iFatherPoint * gc.getNumFatherCategoryInfos()), "FoundingFatherList" + str(iCategory), u"<font=3b>" + szTotal + u" (" + upKeepText + ")</font>", CvUtil.FONT_LEFT_JUSTIFY, 40, self.YResolution - 300 + (24 * (iFatherPoint + 1)), -0.1, FontTypes.SMALL_FONT, WidgetTypes.WIDGET_GENERAL, -1, -1 )
 				screen.moveToFront("PointTotal" + str(iCategory + iFatherPoint * gc.getNumFatherCategoryInfos()))
 				
 			iTopBarPoints = self.FatherBars[iCategory][0]

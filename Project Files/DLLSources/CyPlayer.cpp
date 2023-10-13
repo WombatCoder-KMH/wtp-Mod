@@ -535,6 +535,14 @@ int CyPlayer::getFatherScore()
 {
 	return m_pPlayer ? m_pPlayer->getFatherScore() : -1;
 }
+int CyPlayer::calculateNextFundingFartherUpKeep(int fatherCategory)
+{
+	return m_pPlayer ? m_pPlayer->calculateNextFundingFartherUpKeep(fatherCategory) : -1;
+}
+int CyPlayer::calculateFundingFartherUpKeep(int fatherCategory)
+{
+	return m_pPlayer ? m_pPlayer->calculateFundingFartherUpKeep(fatherCategory) : -1;
+}
 int CyPlayer::getTotalTimePlayed()
 {
 	return m_pPlayer ? m_pPlayer->getTotalTimePlayed() : -1;

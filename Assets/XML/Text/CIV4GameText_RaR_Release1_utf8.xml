@@ -1739,4 +1739,12 @@
         <German>[ICON_BULLET]%d2%F3_Icon[TAB]durch Stadtgröße</German>
         <Russian>[ICON_BULLET]%d2%F3_Icon[TAB]от населения</Russian>
     </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_FUNDING_FATHER_UPKEEP_PAYED</Tag>
+        <English>Funding father upkeep payed %d1[ICON_GOLD]</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_FUNDING_FATHER_CATEGORY_UP_KEEP_AND_NEXT_UP_KEEP</Tag>
+        <English>UpKeep: %d1_upkeep[ICON_GOLD] Next upkeep: +%d2_nextupkeep[ICON_GOLD]</English>
+    </TEXT>
 </Civ4GameText>
