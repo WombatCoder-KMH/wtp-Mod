@@ -15,13 +15,13 @@
             <iStoragePercent>100</iStoragePercent>
             <iTrainPercent>100</iTrainPercent>
             <iConstructPercent>100</iConstructPercent>
-            <iFatherPercent>100</iFatherPercent>
+            <iFatherPercent>200</iFatherPercent>
             <iGreatGeneralPercent>100</iGreatGeneralPercent>
             <iRevolutionTurns>300</iRevolutionTurns>
             <GameTurnInfos>
                 <GameTurnInfo>
-                    <iMonthIncrement>12</iMonthIncrement>
-                    <iTurnsPerIncrement>600</iTurnsPerIncrement>
+                    <iMonthIncrement>4</iMonthIncrement>
+                    <iTurnsPerIncrement>1800</iTurnsPerIncrement>
                 </GameTurnInfo>
             </GameTurnInfos>
         </GameSpeedInfo>
