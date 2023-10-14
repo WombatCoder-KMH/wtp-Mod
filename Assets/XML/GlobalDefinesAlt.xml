@@ -851,7 +851,7 @@
 	</Define>
 	<Define>
 		<DefineName>PRICE_DIFF_EUROPE_DOMESTIC_OTHER_GOODS</DefineName>
-		<iDefineIntVal>2</iDefineIntVal>
+		<iDefineIntVal>-2</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>DOMESTIC_SALES_MESSAGES</DefineName>

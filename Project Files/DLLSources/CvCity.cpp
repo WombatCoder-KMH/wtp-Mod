@@ -131,6 +131,10 @@ void CvCity::init(int iID, PlayerTypes eOwner, Coordinates initCoord, bool bBump
 				iBuyPrice = kYield.getBuyPriceLow() + GC.getGameINLINE().getSorenRandNum(kYield.getBuyPriceHigh() - kYield.getBuyPriceLow() + 1, "Yield Price");
 				// WTP, trying to fix issue that Domestic Market became unattractive
 				iBuyPrice += GLOBAL_DEFINE_PRICE_DIFF_EUROPE_DOMESTIC_OTHER_GOODS;
+				if (iBuyPrice < kYield.getBuyPriceLow())
+				{
+					iBuyPrice = kYield.getBuyPriceLow();
+				}
 			}
 
 			setYieldBuyPrice(eYield, iBuyPrice);
@@ -13884,6 +13888,10 @@ void CvCity::doPrices()
 			// WTP, trying to fix issue that Domestic Market became unattractive
 		default:
 			iTargetPrice += GLOBAL_DEFINE_PRICE_DIFF_EUROPE_DOMESTIC_OTHER_GOODS;
+			if (iTargetPrice < kYield.getBuyPriceLow())
+			{
+				iTargetPrice = kYield.getBuyPriceLow();
+			}
 			break;
 		}
 
