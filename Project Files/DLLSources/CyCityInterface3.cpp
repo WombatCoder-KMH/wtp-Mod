@@ -72,6 +72,7 @@ void CyCityPythonInterface3(python::class_<CyCity>& x)
 		
 		// R&R, Robert Surcouf, Domestic Market display START
 		.def("getYieldBuyPrice", &CyCity::getYieldBuyPrice, "int (int /*YieldTypes*/)")
+		.def("getYieldActualBuyPrice", &CyCity::getYieldActualBuyPrice, "int (int /*YieldTypes*/)")
 		.def("getYieldDemand", &CyCity::getYieldDemand, "int (int /*YieldTypes*/)")
 		// R&R, Robert Surcouf, Domestic Market display END
 		

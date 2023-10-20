@@ -5,6 +5,7 @@ import CvUtil
 import random
 from math import sqrt
 import sys
+import time
 
 """
 NOTES ABOUT THE MAP UTILITIES
@@ -762,6 +763,7 @@ class MultilayeredFractal:
 	                          bShift = True, iStrip = 15,
 	                          rift_grain = -1, has_center_rift = False,
 	                          invert_heights = False):
+		CvUtil.pyPrint("MultilayeredFractal.generatePlotsInRegion start: " + str(time.clock()))
 		# This is the code to generate each fractal.
 		# Determine and pass in the appropriate arguments from the controlling function.
 		#
@@ -827,9 +829,11 @@ class MultilayeredFractal:
 				self.wholeworldPlotTypes[iWorld] = self.plotTypes[i]
 
 		# This region is done.
+		CvUtil.pyPrint("MultilayeredFractal.generatePlotsInRegion end: " + str(time.clock()))
 		return
 
 	def generatePlotsByRegion(self):
+		CvUtil.pyPrint("MultilayeredFractal.generatePlotsByRegion start: " + str(time.clock()))
 		# Sirian's MultilayeredFractal class, controlling function.
 		# You -MUST- customize this function for each use of the class.
 		#
@@ -951,6 +955,7 @@ class MultilayeredFractal:
 		# your plot generation is complete, return the global plot array.
 		#
 		# All regions have been processed. Plot Type generation completed.
+		CvUtil.pyPrint("MultilayeredFractal.generatePlotsByRegion end: " + str(time.clock()))
 		return self.wholeworldPlotTypes
 
 '''

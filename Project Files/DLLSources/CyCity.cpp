@@ -848,6 +848,10 @@ int CyCity::getYieldBuyPrice(int /*YieldTypes*/ eYield) const
 {
 	return m_pCity ? m_pCity->getYieldBuyPrice((YieldTypes)eYield) : -1;
 }
+int CyCity::getYieldActualBuyPrice(int /*YieldTypes*/ eYield) const
+{
+	return m_pCity ? m_pCity->getYieldActualBuyPrice((YieldTypes)eYield) : -1;
+}
 int CyCity::getYieldDemand(int /*YieldTypes*/ eYield) const
 {
 	if (eYield >= 0 && eYield < NUM_CARGO_YIELD_TYPES)

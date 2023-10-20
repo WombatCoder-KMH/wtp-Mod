@@ -733,10 +733,10 @@ class CvDomesticAdvisor:
 						iNetYield += min(self.Cities[iCity].getYieldDemand(iYield), self.Cities[iCity].getYieldStored(iYield) + self.Cities[iCity].calculateNetYield(iYield))
 				elif i == 3:
 					for iCity in range(len(self.Cities)):
-						iNetYield += self.Cities[iCity].getYieldDemand(iYield) * self.Cities[iCity].getYieldBuyPrice(iYield)
+						iNetYield += self.Cities[iCity].getYieldDemand(iYield) * self.Cities[iCity].getYieldActualBuyPrice(iYield)
 				elif i == 4:
 					for iCity in range(len(self.Cities)):
-						iNetYield += min(self.Cities[iCity].getYieldDemand(iYield), self.Cities[iCity].getYieldStored(iYield) + self.Cities[iCity].calculateNetYield(iYield)) * self.Cities[iCity].getYieldBuyPrice(iYield)
+						iNetYield += min(self.Cities[iCity].getYieldDemand(iYield), self.Cities[iCity].getYieldStored(iYield) + self.Cities[iCity].calculateNetYield(iYield)) * self.Cities[iCity].getYieldActualBuyPrice(iYield)
 				elif i == 5:
 					for iCity in range(len(self.Cities)):
 						iNetYield += self.Cities[iCity].getYieldStored(iYield)

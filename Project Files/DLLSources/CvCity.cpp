@@ -13745,6 +13745,25 @@ int CvCity::getYieldBuyPrice(YieldTypes eYield) const
 
 }
 
+// Copy from CvCity::doYields
+int CvCity::getYieldActualBuyPrice(YieldTypes eYield) const
+{
+	int iCityHappinessDomesticMarketGoldModifiers = getCityHappiness() - getCityUnHappiness();
+	int iCityLawDomesticMarketGoldModifiers = getCityLaw() - getCityCrime();
+	int iDomesticMarketProfitModifierInPercent = GET_PLAYER(getOwnerINLINE()).getTotalPlayerDomesticMarketProfitModifierInPercent();
+
+	FAssert(validEnumRange(eYield));
+
+	int iAmount = 100;
+	int iProfit = iAmount * getYieldBuyPrice(eYield);
+
+	iProfit = iProfit * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
+	iProfit = iProfit * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
+	iProfit = iProfit * (100 + iDomesticMarketProfitModifierInPercent) / 100;
+
+	return iProfit / iAmount;
+}
+
 // R&R, ray, adjustment Domestic Markets
 // No messages, because too many messages get annoying
 void CvCity::setYieldBuyPrice(YieldTypes eYield, int iPrice)

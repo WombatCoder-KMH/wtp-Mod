@@ -1557,7 +1557,7 @@
 	<!-- DOMESTIC DEMAND EVENTS -->
 	<Define>
 		<DefineName>ENABLE_DOMESTIC_DEMAND_EVENTS</DefineName>
-		<iDefineIntVal>1</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>MIN_CITY_POPULATION_DOMESTIC_DEMAND_EVENTS</DefineName>

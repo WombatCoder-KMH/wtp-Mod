@@ -2480,7 +2480,7 @@ bool CvGameTextMgr::setCombatPlotHelp(CvWStringBuffer &szString, CvPlot* pPlot)
 void createTestFontString(CvWStringBuffer& szString)
 {
 	szString.assign(L"!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[?]^_`abcdefghijklmnopqrstuvwxyz\n");
-	szString.append(L"{}~\\????G????T??????????S??F?O????????a??de??????µ???p??st?f???????????«»°???????©®?£??????");
+	szString.append(L"{}~\\????G????T??????????S??F?O????????a??de??????ï¿½???p??st?f???????????ï¿½ï¿½ï¿½???????ï¿½ï¿½?ï¿½??????");
 	szString.append(L"\n");
 	for (YieldTypes iI = FIRST_YIELD;iI<NUM_YIELD_TYPES;++iI)
 		szString.append(CvWString::format(L"%c", GC.getYieldInfo(iI).getChar()));
@@ -8464,21 +8464,27 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 	// R&R, ray, adjustment Domestic Markets - START
 	int iYieldDomesticDemand = city.getYieldDemand(eYieldType);
 	int iYieldDomesticPrice = city.getYieldBuyPrice(eYieldType);
+	int iYieldDomesticPriceUnmodified = city.getYieldBuyPriceUnmodified(eYieldType);
 
 	// WTP, ray, correction of Yield Demand Display according to Happiness - START
 	int iCityHappinessDomesticMarketGoldModifiers = city.getCityHappiness() - city.getCityUnHappiness();
 	iYieldDomesticPrice = iYieldDomesticPrice * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
 	// WTP, ray, correction of Yield Demand Display according to Happiness - END
 
+	int iCityLawDomesticMarketGoldModifiers = city.getCityLaw() - city.getCityCrime();
+	iYieldDomesticPrice = iYieldDomesticPrice * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
+
 	// WTP, ray, Domestic Market Profit Modifier - START
 	int iDomesticMarketProfitModifierInPercent = GET_PLAYER(city.getOwnerINLINE()).getTotalPlayerDomesticMarketProfitModifierInPercent();
 	iYieldDomesticPrice = iYieldDomesticPrice * (100 + iDomesticMarketProfitModifierInPercent) / 100;
 	// WTP, ray, Domestic Market Profit Modifier - END
 
+	int iDomesticMarketEventModifierInPercent = city.getDomesticDemandEventPriceModifier();
+
 	if (iYieldDomesticDemand > 0)
 	{
 		szBuffer.append(NEWLINE);
-		szBuffer.append(gDLL->getText("TXT_KEY_DOMESTIC_INFO_YIELD", iYieldDomesticDemand, iYieldDomesticPrice));
+		szBuffer.append(gDLL->getText("TXT_KEY_DOMESTIC_INFO_YIELD", iYieldDomesticDemand, iYieldDomesticPrice, iYieldDomesticPriceUnmodified, iCityHappinessDomesticMarketGoldModifiers, iCityLawDomesticMarketGoldModifiers, iDomesticMarketEventModifierInPercent, iDomesticMarketProfitModifierInPercent));
 	}
 
 	if (GC.getGameINLINE().isDebugMode())

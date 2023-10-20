@@ -385,6 +385,7 @@ public:
 	// R&R, Androrc, Domestic Market
 	int getYieldBuyPriceUnmodified(YieldTypes eYield) const;
 	int getYieldBuyPrice(YieldTypes eYield) const;
+	int getYieldActualBuyPrice(YieldTypes eYield) const;
 	void setYieldBuyPrice(YieldTypes eYield, int iPrice);
 	int getYieldDemand(YieldTypes eYield) const;
 	void getYieldDemands(YieldCargoArray<int> &aYields) const;

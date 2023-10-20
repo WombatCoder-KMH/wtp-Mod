@@ -205,6 +205,7 @@ public:
 
 	// R&R, Robert Surcouf, Domestic Market display START
 	int getYieldBuyPrice(int /*YieldTypes*/ eYield) const;
+	int getYieldActualBuyPrice(int /*YieldTypes*/ eYield) const;
 	int getYieldDemand(int /*YieldTypes*/ eYield) const;
 	//R&R, Robert Surcouf, Domestic Market display END
 	
