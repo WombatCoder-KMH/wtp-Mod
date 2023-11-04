@@ -233,7 +233,7 @@ class MapConstants :
         #steps will be needed but this option will cause more ocean in the
         #middle of the map. The possible choices are 0 = NO_SEPARATION,
         #1 = NORTH_SOUTH_SEPARATION and 2 = EAST_WEST_SEPARATION.
-        self.hmSeparation = 0
+        self.hmSeparation = 1
         
         #If you sink the margins all the way to 0.0, they become too obvious.
         #This variable sets the maximum amount of sinking
@@ -260,15 +260,15 @@ class MapConstants :
         self.plateMapScale = 2.00
 
         #Minimun distance from one plate seed to another
-        self.minSeedRange = 15
+        self.minSeedRange = 20
 
         #Minimum distance from a plate seed to edge of map
         self.minEdgeRange = 5
 
         #Chance for plates to grow. Higher chance tends to make more regular
         #shapes. Lower chance makes more irregular shapes and takes longer.
-        self.plateGrowthChanceX = 0.2
-        self.plateGrowthChanceY = 0.33
+        self.plateGrowthChanceX = 0.18
+        self.plateGrowthChanceY = 0.22
 
         #This sets the amount that tectonic plates differ in altitude.
         self.plateStagger = 0.1
