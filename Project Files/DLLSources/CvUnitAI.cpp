@@ -6833,7 +6833,7 @@ bool CvUnitAI::AI_sailTo(const SailToHelper& sth, bool bMove, bool bIgnoreDanger
 			int iPathTurns;
 			if (generatePath(pLoopPlot, MOVE_BUST_FOG, true, &iPathTurns/*, bIgnoreDanger*/))
 			{
-				int iValue = 10000;
+				int iValue = 100000;
 				iValue /= 100 + getPathCost();
 
 				if (iValue > iBestValue)
