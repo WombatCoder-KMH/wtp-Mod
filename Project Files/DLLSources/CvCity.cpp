@@ -7327,11 +7327,11 @@ void CvCity::doYields()
 				int iProfit = iAmount * getYieldBuyPrice(eYield);
 
 				// WTP, ray, Happiness - START
-				iProfit = iProfit * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
+//				iProfit = iProfit * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
 				// WTP, ray, Happiness - END
 
 				// WTP, ray, Crime and Law - START
-				iProfit = iProfit * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
+//				iProfit = iProfit * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
 				// WTP, ray, Crime and Law - END
 
 				// WTP, ray, Domestic Market Profit Modifier - START
@@ -13748,8 +13748,8 @@ int CvCity::getYieldBuyPrice(YieldTypes eYield) const
 // Copy from CvCity::doYields
 int CvCity::getYieldActualBuyPrice(YieldTypes eYield) const
 {
-	int iCityHappinessDomesticMarketGoldModifiers = getCityHappiness() - getCityUnHappiness();
-	int iCityLawDomesticMarketGoldModifiers = getCityLaw() - getCityCrime();
+//	int iCityHappinessDomesticMarketGoldModifiers = getCityHappiness() - getCityUnHappiness();
+//	int iCityLawDomesticMarketGoldModifiers = getCityLaw() - getCityCrime();
 	int iDomesticMarketProfitModifierInPercent = GET_PLAYER(getOwnerINLINE()).getTotalPlayerDomesticMarketProfitModifierInPercent();
 
 	FAssert(validEnumRange(eYield));
@@ -13757,8 +13757,8 @@ int CvCity::getYieldActualBuyPrice(YieldTypes eYield) const
 	int iAmount = 100;
 	int iProfit = iAmount * getYieldBuyPrice(eYield);
 
-	iProfit = iProfit * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
-	iProfit = iProfit * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
+//	iProfit = iProfit * (100 + iCityHappinessDomesticMarketGoldModifiers) / 100;
+//	iProfit = iProfit * (100 + iCityLawDomesticMarketGoldModifiers) / 100;
 	iProfit = iProfit * (100 + iDomesticMarketProfitModifierInPercent) / 100;
 
 	return iProfit / iAmount;
@@ -13825,6 +13825,12 @@ void CvCity::getYieldDemands(YieldCargoArray<int> &aYields) const
 	// WTP, ray Domestic Market Events - END
 	// for performance reasions, use getUnitYieldDemandTypes as it skips all yields no units/buildings will ever demand
 	const InfoArray<YieldTypes>& kYieldArray = GC.getDomesticDemandYieldTypes();
+
+	int iCityHappinessDomesticMarketGoldModifiers = getCityHappiness() - getCityUnHappiness();
+	int iCityLawDomesticMarketGoldModifiers = getCityLaw() - getCityCrime();
+
+	int iHappinesLawModifier = (100 + iCityHappinessDomesticMarketGoldModifiers) * (100 + iCityLawDomesticMarketGoldModifiers);
+
 	for (int i = 0; i < kYieldArray.getLength(); ++i)
 	{
 		YieldTypes eYield = kYieldArray.get(i);
@@ -13846,6 +13852,10 @@ void CvCity::getYieldDemands(YieldCargoArray<int> &aYields) const
 
 			iDemand *= iMarketModifier;
 			iDemand /= 10000;
+
+			iDemand *= iHappinesLawModifier;
+			iDemand /= 10000;
+
 			aYields.set(iDemand, eYield);
 		}
 	}

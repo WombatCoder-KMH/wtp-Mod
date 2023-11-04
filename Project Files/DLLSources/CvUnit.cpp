@@ -13033,6 +13033,70 @@ const CvWString CvUnit::getNameNoDesc() const
 	return m_szName.GetCString();
 }
 
+std::vector<CvWString> CvUnit::getUpstreamColonyNames()
+{
+	// https://stackoverflow.com/questions/41741331/how-to-split-a-wstring
+	std::wstring wStr = getNameNoDesc();
+
+	std::vector<CvWString> result;
+
+	std::wstring st = L"";
+	for (int i = 0; i < wStr.length(); i++) {
+		if (wStr[i] == L' ' || wStr[i] == L'#') {
+			if (st.length() > 0) {
+				result.push_back(st);
+			}
+			st = L"";
+			if (wStr[i] == L'#') {
+				break;
+			}
+		}
+		else {
+			st += wStr[i];
+		}
+	}
+
+	if (st.length() > 0) {
+		result.push_back(st);
+	}
+
+	return result;
+}
+
+std::vector<CvWString> CvUnit::getDownstreamColonyNames()
+{
+	// https://stackoverflow.com/questions/41741331/how-to-split-a-wstring
+	std::wstring wStr = getNameNoDesc();
+
+	std::vector<CvWString> result;
+
+	std::wstring st = L"";
+
+	int i;
+	for (i = 0; i < wStr.length(); i++) {
+		if (wStr[i] == L'#') {
+			break;
+		}
+	}
+	i++;
+	for (; i < wStr.length(); i++) {
+		if (wStr[i] == L' ') {
+			if (st.length() > 0) {
+				result.push_back(st);
+			}
+			st = L"";
+		}
+		else {
+			st += wStr[i];
+		}
+	}
+
+	if (st.length() > 0) {
+		result.push_back(st);
+	}
+
+	return result;
+}
 std::vector<CvWString> CvUnit::getNameSplit()
 {
 	// https://stackoverflow.com/questions/41741331/how-to-split-a-wstring
@@ -14898,18 +14962,20 @@ bool CvUnit::setSailEurope(EuropeTypes eEurope)
 		{
 			if (pPlot->isRevealed(getTeam(), false))
 			{
-				if (kLoopPlayer.getNumCities() > 0)
-				{
-					int iLoop;
-					for (CvCity* pLoopCity = kLoopPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kLoopPlayer.nextCity(&iLoop))
-					{
-						iAvgDistance += stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE());
-					}
-				}
-				else
-				{
-					iAvgDistance += stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), kLoopPlayer.getStartingPlot()->getX_INLINE(), kLoopPlayer.getStartingPlot()->getY_INLINE());
-				}
+				// if (kLoopPlayer.getNumCities() > 0)
+				// {
+				// 	int iLoop;
+				// 	for (CvCity* pLoopCity = kLoopPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kLoopPlayer.nextCity(&iLoop))
+				// 	{
+				// 		iAvgDistance += stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE());
+				// 	}
+				// }
+				// else
+				// {
+				// 	iAvgDistance += stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), kLoopPlayer.getStartingPlot()->getX_INLINE(), kLoopPlayer.getStartingPlot()->getY_INLINE());
+				// }
+
+				iAvgDistance += stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), plot()->getX_INLINE(), plot()->getY_INLINE());
 
 				if (iAvgDistance > 0 && iAvgDistance < iBestDistance)
 				{

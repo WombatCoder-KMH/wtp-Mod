@@ -652,6 +652,8 @@ public:
 	DllExport const CvWString getName(uint uiForm = 0) const;
 	const wchar* getNameKey() const;
 	const CvWString getNameNoDesc() const;
+	std::vector<CvWString> getUpstreamColonyNames();
+	std::vector<CvWString> getDownstreamColonyNames();
 	std::vector<CvWString> getNameSplit();
 	void setName(const CvWString szNewValue);
 	const CvWString getNameAndProfession() const;

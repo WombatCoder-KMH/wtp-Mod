@@ -943,15 +943,21 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 		// My code.
 
 		std::vector<CvWString> allNames;
+		std::vector<CvWString> allUpstreamNames;
+		std::vector<CvWString> allDownstreamNames;
 
 		for (int u = 0; u < getNumUnits(); u++) {
 			CvUnit* unit = getUnitAt(u);
 
-			std::vector<CvWString> names = unit->getNameSplit();
-
-			// https://www.delftstack.com/howto/cpp/append-vector-to-vector-cpp/
-			allNames.insert(allNames.end(), names.begin(), names.end());
+			std::vector<CvWString> upstreamNames = unit->getUpstreamColonyNames();
+			allUpstreamNames.insert(allUpstreamNames.end(), upstreamNames.begin(), upstreamNames.end());
+			std::vector<CvWString> downstreamNames = unit->getDownstreamColonyNames();
+			allDownstreamNames.insert(allDownstreamNames.end(), downstreamNames.begin(), downstreamNames.end());
 		}
+
+		// https://www.delftstack.com/howto/cpp/append-vector-to-vector-cpp/
+		allNames.insert(allNames.end(), allUpstreamNames.begin(), allUpstreamNames.end());
+		allNames.insert(allNames.end(), allDownstreamNames.begin(), allDownstreamNames.end());
 
 		// My code end.
 
@@ -1026,6 +1032,34 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 
 				if (!(foundSourceName && foundDestinationName)) {
 					continue;
+				}
+
+				bool sourceIsUpstream = false;
+				for (size_t j = 0; j < allUpstreamNames.size(); j++) {
+					if (allUpstreamNames[j] == kmh_pSourceCity->getName()) {
+						sourceIsUpstream = true;
+					}
+				}
+
+				bool destinationIsUpstream = false;
+				for (size_t j = 0; j < allUpstreamNames.size(); j++) {
+					if (allUpstreamNames[j] == kmh_pDestinationCity->getName()) {
+						destinationIsUpstream = true;
+					}
+				}
+
+				if (sourceIsUpstream != destinationIsUpstream && destinationIsUpstream) {
+					YieldTypes yield = pRoute->getYield();
+
+					int sourceMaxLevel = kmh_pSourceCity->getImportsLimit(yield);
+					int sourceStored = kmh_pSourceCity->getYieldStored(yield);
+
+					int destinationMinLevel = kmh_pDestinationCity->getMaintainLevel(yield);
+					int destinationStored = kmh_pDestinationCity->getYieldStored(yield);
+
+					if (destinationStored > destinationMinLevel && sourceStored < sourceMaxLevel) {
+						continue;
+					}
 				}
 
 				//gDLL->MessageBox("Treate route is available.", "Auto trade info");
