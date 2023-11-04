@@ -704,7 +704,9 @@ class CvDomesticAdvisor:
 		szState = self.StatePages[self.CurrentState][self.CurrentPage]
 		start = self.YieldStart()
 		
-		for i in range(0,7):
+		player = gc.getPlayer(gc.getGame().getActivePlayer())
+
+		for i in range(0,10):
 			sign = ""
 			line_name = "Warehouse"
 			if i == 0:
@@ -718,6 +720,14 @@ class CvDomesticAdvisor:
 				line_name = "Demand value"
 			if i == 4:
 				line_name = "Demand meet value"
+			if i == 5:
+				line_name = "Warehouse"
+			if i == 6:
+				line_name = "Trade Europe"
+			if i == 7:
+				line_name = "Trade Africa"
+			if i == 8:
+				line_name = "Trade Port Royal"
 			screen.setTableText(szState + "ListBackground", 0, i, "<font=2>" +""         + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
 			screen.setTableText(szState + "ListBackground", 1, i, "<font=2>" + line_name + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
 			for iYield in range(start, self.YieldEnd()):
@@ -740,6 +750,12 @@ class CvDomesticAdvisor:
 				elif i == 5:
 					for iCity in range(len(self.Cities)):
 						iNetYield += self.Cities[iCity].getYieldStored(iYield)
+				elif i == 6:
+					iNetYield = player.getYieldTradedTotalINT(iYield)
+				elif i == 7:
+					iNetYield = player.getYieldTradedTotalINTAfrica(iYield)
+				elif i == 8:
+					iNetYield = player.getYieldTradedTotalINTPortRoyal(iYield)
 				szText = unicode(iNetYield)
 				if iNetYield > 0:
 					szText = localText.getText("TXT_KEY_COLOR_POSITIVE", ()) + sign + szText + localText.getText("TXT_KEY_COLOR_REVERT", ())
@@ -1079,7 +1095,7 @@ class CvDomesticAdvisor:
 			screen.setTableColumnHeader(szStateName, 1, "<font=2>" + localText.getText("TXT_KEY_DOMESTIC_ADVISOR_NAME", ()).upper() + "</font>", self.CITY_NAME_COLUMN_WIDTH - 56 )
 
 			# total production page - start - Nightinggale
-			num_cities = 6
+			num_cities = 9
 			
 			if iState != self.TOTAL_PRODUCTION_STATE:
 				num_cities = len(self.Cities)
