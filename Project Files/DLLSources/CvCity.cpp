@@ -14566,6 +14566,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 {
 	// Note: has to match code in CvCity::handleAutoTraderouteSetup
 
+	const int iGameSpeedModifiedBaseStorageQuanta = (100 * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent()) / 100;
+
 	CvPlayer& kPlayer = GET_PLAYER(GC.getGameINLINE().getActivePlayer());
 	CvCity* pCity = kPlayer.getCity(pCityId);
 	if (pCity != NULL)
@@ -14606,8 +14608,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 				bExport          = 1;
 				bMaintainImport  = 0;
 				bAutoExport      = 0;
-				iImportLimitLevel = 100;
-				iMaintainLevel    = 100;
+				iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+				iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 			}
 			else if (0 == pCity->isImport(eYield)
 				&& 1 == pCity->isExport(eYield)
@@ -14621,8 +14623,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 				bExport          = 1;
 				bMaintainImport  = 0;
 				bAutoExport      = 0;
-				iImportLimitLevel = 100;
-				iMaintainLevel    = 100;
+				iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+				iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 			}
 			else if (1 == pCity->isImport(eYield)
 				&& 1 == pCity->isExport(eYield)
@@ -14636,8 +14638,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 				bExport          = 1;
 				bMaintainImport  = 0;
 				bAutoExport      = 0;
-				iImportLimitLevel = 300;
-				iMaintainLevel    = 300;
+				iImportLimitLevel = 3 * iGameSpeedModifiedBaseStorageQuanta;
+				iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
 			}
 			else if (1 == pCity->isImport(eYield)
 				&& 1 == pCity->isExport(eYield)
@@ -14651,8 +14653,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 				bExport          = 1;
 				bMaintainImport  = 0;
 				bAutoExport      = 0;
-				iImportLimitLevel = 800;
-				iMaintainLevel    = 300;
+				iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+				iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
 			}
 			else if (1 == pCity->isImport(eYield)
 				&& 1 == pCity->isExport(eYield)
@@ -14666,8 +14668,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 				bExport          = 1;
 				bMaintainImport  = 0;
 				bAutoExport      = 0;
-				iImportLimitLevel = 800;
-				iMaintainLevel    = 100;
+				iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+				iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 			}
 
 			if (bImport != pCity->isImport(eYield)
@@ -14691,6 +14693,8 @@ void CvCity::togleTrade(int pCityId, YieldTypes eYield)
 void CvCity::togleDomestigTrade()
 {
 	// Note: has to match code in CvCity::handleAutoTraderouteSetup
+
+	const int iGameSpeedModifiedBaseStorageQuanta = (100 * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent()) / 100;
 
 	const InfoArray<YieldTypes>& kYieldArray = GC.getDomesticDemandYieldTypes();
 
@@ -14760,8 +14764,8 @@ void CvCity::togleDomestigTrade()
 			bExport          = 1;
 			bMaintainImport  = 0;
 			bAutoExport      = 0;
-			iImportLimitLevel = 100;
-			iMaintainLevel    = 100;
+			iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+			iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 		}
 		else if (0 == bImport
 			&& 1 == bExport
@@ -14775,8 +14779,8 @@ void CvCity::togleDomestigTrade()
 			bExport          = 1;
 			bMaintainImport  = 0;
 			bAutoExport      = 0;
-			iImportLimitLevel = 100;
-			iMaintainLevel    = 100;
+			iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+			iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 		}
 		else if (1 == bImport
 			&& 1 == bExport
@@ -14790,8 +14794,8 @@ void CvCity::togleDomestigTrade()
 			bExport          = 1;
 			bMaintainImport  = 0;
 			bAutoExport      = 0;
-			iImportLimitLevel = 300;
-			iMaintainLevel    = 300;
+			iImportLimitLevel = 3 * iGameSpeedModifiedBaseStorageQuanta;
+			iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
 		}
 		else if (1 == bImport
 			&& 1 == bExport
@@ -14805,8 +14809,8 @@ void CvCity::togleDomestigTrade()
 			bExport          = 1;
 			bMaintainImport  = 0;
 			bAutoExport      = 0;
-			iImportLimitLevel = 800;
-			iMaintainLevel    = 300;
+			iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+			iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
 		}
 		else if (1 == bImport
 			&& 1 == bExport
@@ -14820,8 +14824,8 @@ void CvCity::togleDomestigTrade()
 			bExport          = 1;
 			bMaintainImport  = 0;
 			bAutoExport      = 0;
-			iImportLimitLevel = 800;
-			iMaintainLevel    = 100;
+			iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+			iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
 		}
 		else if (1 == bImport
 			&& 1 == bExport
