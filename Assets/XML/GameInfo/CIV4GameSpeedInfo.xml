@@ -69,7 +69,7 @@
             <iStoragePercent>300</iStoragePercent>
             <iTrainPercent>300</iTrainPercent>
             <iConstructPercent>300</iConstructPercent>
-            <iFatherPercent>300</iFatherPercent>
+            <iFatherPercent>600</iFatherPercent>
             <iGreatGeneralPercent>300</iGreatGeneralPercent>
             <iRevolutionTurns>900</iRevolutionTurns>
             <GameTurnInfos>
