@@ -621,10 +621,10 @@
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_EDIT_TEACHER_LIST_NO_TEACHER</Tag>
-        <English>%s1_unit : [COLOR_WARNING_TEXT]NO[COLOR_REVERT] teacher</English>
-        <French>%s1_unit : [COLOR_WARNING_TEXT]PAS[COLOR_REVERT] de formateur</French>
-        <German>%s1_unit : [COLOR_WARNING_TEXT]KEIN[COLOR_REVERT] Lehrer</German>
-        <Russian>%s1_unit : [COLOR_WARNING_TEXT]НЕТ[COLOR_REVERT] учителя</Russian>
+        <English>(%d2_numberInPlot) %s1_unit : [COLOR_WARNING_TEXT]NO[COLOR_REVERT] teacher</English>
+        <French>(%d2_numberInPlot) %s1_unit : [COLOR_WARNING_TEXT]PAS[COLOR_REVERT] de formateur</French>
+        <German>(%d2_numberInPlot) %s1_unit : [COLOR_WARNING_TEXT]KEIN[COLOR_REVERT] Lehrer</German>
+        <Russian>(%d2_numberInPlot) %s1_unit : [COLOR_WARNING_TEXT]НЕТ[COLOR_REVERT] учителя</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_EDIT_CUSTOM_HOUSE</Tag>

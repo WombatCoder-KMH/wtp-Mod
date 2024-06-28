@@ -3406,7 +3406,18 @@ bool CvDLLButtonPopup::launchTeacherListPopup(CvPopup* pPopup, CvPopupInfo &info
 				gDLL->getInterfaceIFace()->popupSetCheckBoxState(pPopup, 0, pCity->getOrderedStudentsRepeat(eUnit), eUnit);
 				gDLL->getInterfaceIFace()->popupCreateSpinBox(pPopup, eUnit, L"", pCity->getOrderedStudents(eUnit), 1, 50, 0);
 			} else {
-				gDLL->getInterfaceIFace()->popupSetBodyString(pPopup, gDLL->getText("TXT_KEY_EDIT_TEACHER_LIST_NO_TEACHER", kUnit.getDescription()));
+				CvPlot* pPlot = pCity->plot();
+				int numUnitWithSpeciallity = 0;
+				for (int iU = 0; iU < pPlot->getNumUnits(); iU++)
+				{
+					CvUnit* pLoopUnit = pPlot->getUnitByIndex(iU);
+					if (pLoopUnit->getUnitType() == eUnit)
+					{
+						numUnitWithSpeciallity++;
+					}
+				}
+
+				gDLL->getInterfaceIFace()->popupSetBodyString(pPopup, gDLL->getText("TXT_KEY_EDIT_TEACHER_LIST_NO_TEACHER", kUnit.getDescription(), numUnitWithSpeciallity));
 			}
 			gDLL->getInterfaceIFace()->popupEndLayout(pPopup);
 		}
