@@ -2158,6 +2158,48 @@ void CvPlayer::doTurn()
 	// the once a turn random number
 	m_ulRandomSeed = GC.getGameINLINE().getSorenRand().peek();
 
+// 	int eventCount = 0;
+// 	int realEventCount = 0;
+// 	int questCount = 0;
+
+// 	for (CvEventMap::iterator it = m_mapEventsOccured.begin(); it != m_mapEventsOccured.end(); ++it)
+// 	{
+// 		eventCount++;
+// 		EventTypes wcEventType = (*it).first;
+
+// 		if (wcEventType != NO_EVENT)
+// 		{
+// 			realEventCount++;
+// 			CvEventInfo wcEventInfo = GC.getEventInfo(wcEventType);
+
+// //			EventTriggeredData& triggerData = (*it).second;
+// //			CvEventTriggerInfo triggerIndo = GC.getEventTriggerInfo(triggerData.m_eTrigger);
+
+// 			if (wcEventInfo.isQuest())
+// 			{
+// 				questCount++;
+// 				if (wcEventInfo.getTextKeyWide() != NULL) {
+// //					gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"m_mapEventsOccured: quest found"), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// //					gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"m_mapEventsOccured: eventInfo.getDescription()=%s", wcEventInfo.getDescription()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 					gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"m_mapEventsOccured: eventInfo.getQuestFailTextKey()=%s", wcEventInfo.getQuestFailTextKey()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 					gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"m_mapEventsOccured: eventInfo.getTextKeyWide()=%s", wcEventInfo.getTextKeyWide()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 				}
+// 			}
+// 		}
+
+// 		expireEvent((*it).first, (*it).second, true);
+// 		m_mapEventsOccured.erase(it);
+// 	}
+// 	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"Quest, real event, event counts: %d, %d, %d", questCount, realEventCount, eventCount), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+
+
+// 	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"GC.getNumEventInfos() = %d", GC.getNumEventInfos()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"GC.getNumEventTriggerInfos() = %d", GC.getNumEventTriggerInfos()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"GC.getNumEntityEventInfos() = %d", GC.getNumEntityEventInfos()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+// 	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"GC.getNumEntityEventTypes() = %d", GC.getNumEntityEventTypes()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+
+// //	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"(1) getNumEventsTriggered() = %d", getNumEventsTriggered()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+
 	FAssertMsg(isAlive(), "isAlive is expected to be true");
 	FAssertMsg(!hasBusyUnit() || GC.getGameINLINE().isMPOption(MPOPTION_SIMULTANEOUS_TURNS)  || GC.getGameINLINE().isSimultaneousTeamTurns(), "End of turn with busy units in a sequential-turn game");
 
