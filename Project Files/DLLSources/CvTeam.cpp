@@ -2507,34 +2507,34 @@ void CvTeam::changeUnitsPurchasedHistory(UnitClassTypes eIndex, int iChange)
 // Protected Functions...
 void CvTeam::testFoundingFather()
 {
-	bool bFound = false;
-	for (int iFather = 0; iFather < GC.getNumFatherInfos() && !bFound; ++iFather)
-	{
-		FatherTypes eFather = (FatherTypes) iFather;
-		if (canConvinceFather(eFather))
-		{
-			bFound = true;
-			if (isHuman())
-			{
-				for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
-				{
-					CvPlayer& kPlayer = GET_PLAYER((PlayerTypes) iPlayer);
-					if (kPlayer.isAlive() && kPlayer.getTeam() == getID())
-					{
-						if (kPlayer.isHuman())
-						{
-							CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_FOUNDING_FATHER, eFather);
-							gDLL->getInterfaceIFace()->addPopup(pInfo, (PlayerTypes) iPlayer);
-						}
-					}
-				}
-			}
-			else //AI
-			{
-//				convinceFather(eFather, true);
-			}
-		}
-	}
+// 	bool bFound = false;
+// 	for (int iFather = 0; iFather < GC.getNumFatherInfos() && !bFound; ++iFather)
+// 	{
+// 		FatherTypes eFather = (FatherTypes) iFather;
+// 		if (canConvinceFather(eFather))
+// 		{
+// 			bFound = true;
+// 			if (isHuman())
+// 			{
+// 				for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+// 				{
+// 					CvPlayer& kPlayer = GET_PLAYER((PlayerTypes) iPlayer);
+// 					if (kPlayer.isAlive() && kPlayer.getTeam() == getID())
+// 					{
+// 						if (kPlayer.isHuman())
+// 						{
+// 							CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_FOUNDING_FATHER, eFather);
+// 							gDLL->getInterfaceIFace()->addPopup(pInfo, (PlayerTypes) iPlayer);
+// 						}
+// 					}
+// 				}
+// 			}
+// 			else //AI
+// 			{
+// //				convinceFather(eFather, true);
+// 			}
+// 		}
+// 	}
 }
 
 void CvTeam::cancelDefensivePacts(TeamTypes eEndingTeam)
