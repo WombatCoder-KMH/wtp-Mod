@@ -1321,10 +1321,15 @@ class HeightMap :
         yRange.reverse()
 
         for y in yRange:
+            line = ""
             for x in range(mc.hmWidth):
                 i = GetHmIndex(x,y)
                 if islandAdded[i] == True:
                     self.heightMap[i] = self.seaLevel + 0.2
+                    line = line + "x"
+                else:
+                    line = line + "."
+            CvUtil.myPrint(line)
 
     def countPlotsAboveSealevel(self, x, y, distance):
         count = 0
@@ -1427,7 +1432,7 @@ class HeightMap :
     
     def printInitialPeaks(self):
         lineString = "midpoint displacement peaks and margins"
-        print lineString
+        CvUtil.myPrint(lineString)
         if not mc.WrapY:
             adjustedHeight = mc.hmHeight - 1
         else:
@@ -1442,13 +1447,13 @@ class HeightMap :
                     lineString += "1"
                 elif self.heightMap[i] == 0.0:
                     lineString += "0"
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printHeightMap(self):
         lineString = "Height Map"
-        print lineString
+        CvUtil.myPrint(lineString)
         for y in range(mc.hmHeight - 1,-1,-1):
             lineString = ""
             for x in range(0,mc.hmWidth,1):
@@ -1459,13 +1464,13 @@ class HeightMap :
                     lineString += '.'
                 else:
                     lineString += chr(mapLoc + 48)
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printPlateMap(self,plateMap):
         lineString = "Plate Map"
-        print lineString
+        CvUtil.myPrint(lineString)
         for y in range(mc.hmHeight - 1,-1,-1):
             lineString = ""
             for x in range(0,mc.hmWidth,1):
@@ -1474,9 +1479,9 @@ class HeightMap :
                 if mapLoc > 40:
                     mapLoc = 41
                 lineString += chr(mapLoc + 48)
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printPreSmoothMap(self,preSmoothMap):
         lineString = "Pre-Smooth Map"
@@ -2237,7 +2242,7 @@ class SmallMaps :
         print lineString
         
     def printPlotMap(self):
-        print "Plot Map"
+        CvUtil.myPrint("Plot Map")
         for y in range(mc.height - 1,-1,-1):
             lineString = ""
             for x in range(mc.width):
@@ -2250,9 +2255,9 @@ class SmallMaps :
                     lineString += '+'
                 else:
                     lineString += '.'
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
     def printTerrainMap(self):
         print "Terrain Map"
         wz = WindZones(mc.height,80,-80)
