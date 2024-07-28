@@ -1295,6 +1295,56 @@ class HeightMap :
         mc.hmHeight = newHeight
         self.heightMap = newHeightMap
         
+    def sprinkleSmallIslands(self):
+        islandAdded = [False] * (mc.hmWidth*mc.hmHeight)
+
+        PRand.seed()
+        for y in range(mc.hmHeight):
+            if (y < 0 or y > mc.hmHeight - 1 - 0):
+                continue
+            for x in range(mc.hmWidth):
+                if (x < 2 or x > mc.hmWidth - 1 - 2):
+                    continue
+                i = GetHmIndex(x,y)
+
+                mapTilesCount = self.countplotsWithinMap(x, y, 3)
+
+                landCountClose = self.countPlotsAboveSealevel(x, y, 3)
+                landCountFare = self.countPlotsAboveSealevel(x, y, 5)
+
+                if landCountClose == 0 and landCountFare < 5:
+                    if self.heightMap[i] <= self.seaLevel:
+                        if PRand.randint(0,100) < 1 * (1 - float(landCountFare)/float(mapTilesCount)):
+                            islandAdded[i] = True
+
+        yRange = range(mc.hmHeight)
+        yRange.reverse()
+
+        for y in yRange:
+            for x in range(mc.hmWidth):
+                i = GetHmIndex(x,y)
+                if islandAdded[i] == True:
+                    self.heightMap[i] = self.seaLevel + 0.2
+
+    def countPlotsAboveSealevel(self, x, y, distance):
+        count = 0
+        for yy in range(y - distance, y + distance + 1):
+            for xx in range(x - distance, x + distance + 1):
+                ii = GetHmIndex(xx,yy)
+                if ii != -1:
+                    if self.heightMap[ii] > self.seaLevel:
+                        count += 1
+        return count
+
+    def countplotsWithinMap(self, x, y, distance):
+        count = 0
+        for yy in range(y - distance, y + distance + 1):
+            for xx in range(x - distance, x + distance + 1):
+                ii = GetHmIndex(xx,yy)
+                if ii != -1:
+                    count += 1
+        return count
+
     def calculateSeaLevel(self):
         self.seaLevel = FindValueFromPercent(self.heightMap,mc.hmWidth,mc.hmHeight,mc.landPercent,0.02,True)
         return
@@ -4678,6 +4728,7 @@ def generatePlotTypes():
 ##    hm.printHeightMap()
     hm.fillInLakes()
     hm.addWaterBands()
+    hm.sprinkleSmallIslands()
 ##    hm.printHeightMap()
     cm.createClimateMaps()
     sm.initialize()
