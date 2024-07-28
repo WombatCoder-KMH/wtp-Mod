@@ -260,7 +260,7 @@ class MapConstants :
         self.plateMapScale = 2.00
 
         #Minimun distance from one plate seed to another
-        self.minSeedRange = 20
+        self.minSeedRange = 15
 
         #Minimum distance from a plate seed to edge of map
         self.minEdgeRange = 5
