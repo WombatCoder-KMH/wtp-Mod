@@ -159,6 +159,13 @@ def pyPrint(stuff):
 	stuff = 'PY:' + stuff + "\n"
 	sys.stdout.write(stuff)
 
+def myPrint(text):
+	text = text + "\n"
+	text = convertToStr(text)
+	file = open(os.environ['USERPROFILE'] + "\Documents\my games\Civilization IV Colonization\Logs\myoutput.txt", "a")
+	file.write(text)
+	file.close()
+
 def pyAssert(cond, msg):
 	if (cond==False):
 		sys.stderr.write(string(msg))
