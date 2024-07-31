@@ -1303,18 +1303,26 @@ class HeightMap :
             if (y < 0 or y > mc.hmHeight - 1 - 0):
                 continue
             for x in range(mc.hmWidth):
-                if (x < 2 or x > mc.hmWidth - 1 - 2):
+                if (x < 1 or x > (mc.hmWidth - 1) - 1):
                     continue
                 i = GetHmIndex(x,y)
 
                 mapTilesCount = self.countplotsWithinMap(x, y, 3)
 
-                landCountClose = self.countPlotsAboveSealevel(x, y, 3)
-                landCountFare = self.countPlotsAboveSealevel(x, y, 5)
+                landCountClose = self.countPlotsAboveSealevel(x, y, 2)
+                landCountFare = self.countPlotsAboveSealevel(x, y, 4)
+
+                minY = 0
+                maxY = mc.hmHeight - 1
+
+                # Calculate polar region bonus
+                poplarBonusFactor = 1
+                if (y >= minY + 1 and y <= minY + 4) or (y <= maxY - 1 and y >= maxY - 4):
+                    poplarBonusFactor = 2
 
                 if landCountClose == 0 and landCountFare < 5:
                     if self.heightMap[i] <= self.seaLevel:
-                        if PRand.randint(0,100) < 1 * (1 - float(landCountFare)/float(mapTilesCount)):
+                        if PRand.randint(0,100) < 1.5 * poplarBonusFactor * (1 - float(landCountFare)/float(mapTilesCount)):
                             islandAdded[i] = True
 
         yRange = range(mc.hmHeight)
