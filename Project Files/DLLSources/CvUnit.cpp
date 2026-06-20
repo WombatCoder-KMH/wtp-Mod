@@ -13327,6 +13327,88 @@ const CvWString CvUnit::getNameNoDesc() const
 	return m_szName.GetCString();
 }
 
+// WTP, KMH, Restricted trade route - START
+// Splits the unit's name on spaces, stopping at (and excluding) a "#" if present
+std::vector<CvWString> CvUnit::getUpstreamColonyNames() const
+{
+	std::wstring wStr = getNameNoDesc();
+
+	std::vector<CvWString> result;
+	std::wstring st = L"";
+	for (size_t i = 0; i < wStr.length(); i++)
+	{
+		if (wStr[i] == L' ' || wStr[i] == L'#')
+		{
+			if (st.length() > 0)
+			{
+				result.push_back(st);
+			}
+			st = L"";
+			if (wStr[i] == L'#')
+			{
+				break;
+			}
+		}
+		else
+		{
+			st += wStr[i];
+		}
+	}
+
+	if (st.length() > 0)
+	{
+		result.push_back(st);
+	}
+
+	return result;
+}
+
+// Splits the part of the unit's name after a "#" on spaces; empty if no "#" is present
+std::vector<CvWString> CvUnit::getDownstreamColonyNames() const
+{
+	std::wstring wStr = getNameNoDesc();
+
+	std::vector<CvWString> result;
+	std::wstring st = L"";
+
+	size_t i = 0;
+	for (; i < wStr.length(); i++)
+	{
+		if (wStr[i] == L'#')
+		{
+			break;
+		}
+	}
+	if (i == wStr.length())
+	{
+		return result; // no "#" found, no downstream colonies
+	}
+	i++;
+	for (; i < wStr.length(); i++)
+	{
+		if (wStr[i] == L' ')
+		{
+			if (st.length() > 0)
+			{
+				result.push_back(st);
+			}
+			st = L"";
+		}
+		else
+		{
+			st += wStr[i];
+		}
+	}
+
+	if (st.length() > 0)
+	{
+		result.push_back(st);
+	}
+
+	return result;
+}
+// WTP, KMH, Restricted trade route - END
+
 const CvWString CvUnit::getNameAndProfession() const
 {
 	CvWString szText;

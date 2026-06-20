@@ -953,6 +953,24 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 	{
 		std::vector<CvTradeRoute*> aiRoutes;
 		kOwner.getTradeRoutes(aiRoutes);
+
+		// WTP, KMH, Restricted trade route - START
+		// Human players can restrict this group's auto-trading to a named chain of colonies by
+		// naming its units "Upstream1 Upstream2 # Downstream1 Downstream2" (see CvUnit::getUpstreamColonyNames/getDownstreamColonyNames)
+		std::vector<CvWString> allUpstreamNames;
+		std::vector<CvWString> allDownstreamNames;
+		for (int u = 0; u < getNumUnits(); u++)
+		{
+			CvUnit* pUnit = getUnitAt(u);
+			std::vector<CvWString> upstreamNames = pUnit->getUpstreamColonyNames();
+			allUpstreamNames.insert(allUpstreamNames.end(), upstreamNames.begin(), upstreamNames.end());
+			std::vector<CvWString> downstreamNames = pUnit->getDownstreamColonyNames();
+			allDownstreamNames.insert(allDownstreamNames.end(), downstreamNames.begin(), downstreamNames.end());
+		}
+		std::vector<CvWString> allColonyNames(allUpstreamNames);
+		allColonyNames.insert(allColonyNames.end(), allDownstreamNames.begin(), allDownstreamNames.end());
+		// WTP, KMH, Restricted trade route - END
+
 		for (uint i = 0; i < aiRoutes.size(); ++i)
 		{
 			CvTradeRoute* pRoute = aiRoutes[i];
@@ -978,6 +996,43 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			// Erik: Coastal transports cannot have europe as their destination
 			if (bCoastalTransport && (pRoute->getDestinationCity().eOwner != getOwnerINLINE() || (pRoute->getDestinationCity() == kEurope)))
 				continue;
+
+			// WTP, KMH, Restricted trade route - START
+			// Deliberately restrictive: a human-controlled fully-automated group only auto-trades
+			// along routes between cities named in its units' upstream/downstream chain.
+			if (isHuman())
+			{
+				CvCity* pRouteSourceCity = ::getCity(pRoute->getSourceCity());
+				if (pRouteSourceCity == NULL || pDestinationCity == NULL)
+				{
+					continue;
+				}
+
+				bool bFoundSourceName = std::find(allColonyNames.begin(), allColonyNames.end(), pRouteSourceCity->getName()) != allColonyNames.end();
+				bool bFoundDestinationName = std::find(allColonyNames.begin(), allColonyNames.end(), pDestinationCity->getName()) != allColonyNames.end();
+				if (!bFoundSourceName || !bFoundDestinationName)
+				{
+					continue;
+				}
+
+				bool bSourceIsUpstream = std::find(allUpstreamNames.begin(), allUpstreamNames.end(), pRouteSourceCity->getName()) != allUpstreamNames.end();
+				bool bDestinationIsUpstream = std::find(allUpstreamNames.begin(), allUpstreamNames.end(), pDestinationCity->getName()) != allUpstreamNames.end();
+
+				// Don't top off an upstream (source/production) colony from a non-upstream one unless it actually needs it
+				if (bSourceIsUpstream != bDestinationIsUpstream && bDestinationIsUpstream)
+				{
+					YieldTypes eRouteYield = pRoute->getYield();
+					int iSourceMaxLevel = pRouteSourceCity->getImportsLimit(eRouteYield);
+					int iSourceStored = pRouteSourceCity->getYieldStored(eRouteYield);
+					int iDestinationMinLevel = pDestinationCity->getMaintainLevel(eRouteYield);
+					int iDestinationStored = pDestinationCity->getYieldStored(eRouteYield);
+					if (iDestinationStored > iDestinationMinLevel && iSourceStored < iSourceMaxLevel)
+					{
+						continue;
+					}
+				}
+			}
+			// WTP, KMH, Restricted trade route - END
 
 			CvCity* pSourceCity = ::getCity(pRoute->getSourceCity());
 			CvArea* pSourceWaterArea = pSourceCity->waterArea();

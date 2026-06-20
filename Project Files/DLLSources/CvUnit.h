@@ -650,6 +650,11 @@ public:
 	DllExport const CvWString getName(uint uiForm = 0) const;
 	const wchar* getNameKey() const;
 	const CvWString getNameNoDesc() const;
+	// WTP, KMH, Restricted trade route - START
+	// Unit name encodes a "#"-delimited trade chain: words before "#" are upstream colonies, words after are downstream colonies
+	std::vector<CvWString> getUpstreamColonyNames() const;
+	std::vector<CvWString> getDownstreamColonyNames() const;
+	// WTP, KMH, Restricted trade route - END
 	void setName(const CvWString szNewValue);
 	const CvWString getNameAndProfession() const;
 	const wchar* getNameOrProfessionKey() const;
