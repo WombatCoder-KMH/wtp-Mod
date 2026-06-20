@@ -324,6 +324,10 @@ public:
 	int getFatherPointMultiplier() const;
 	void setFatherPointMultiplier(int iValue);
 	void changeFatherPoints(FatherPointTypes ePointType, int iChange);
+	void doFundingFatherUpKeep();
+	int calculateNextFundingFartherUpKeep(int fatherCategory);
+	int calculateFundingFartherUpKeep();
+	int calculateFundingFartherUpKeep(int fatherCategory);
 	int getBuildCost(const CvPlot* pPlot, BuildTypes eBuild) const;
 	bool canBuild(const CvPlot* pPlot, BuildTypes eBuild, bool bTestEra = false, bool bTestVisible = false) const;
 	RouteTypes getBestRoute(CvPlot* pPlot = NULL) const;
@@ -1251,6 +1255,8 @@ protected:
 
 	void testOOSanDoEvent(EventTypes eEvent, bool bSuccess) const;
 	void testOOSanDoGoody(GoodyTypes eGoody, int iUnitID, bool bSuccess) const;
+
+	float calculateFundingFartherBaseUpKeep(float upkeepStart, float upkeepRate, int iFatherNumber);
 
 	CvUnit* firstUnitInternal(int* pIterIdx) const;
 	CvUnit* nextUnitInternal(int* pIterIdx) const;

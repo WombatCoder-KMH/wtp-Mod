@@ -40,6 +40,7 @@
 #include <algorithm>
 #include <numeric>
 #include <map>
+#include <math.h>
 #include <vector>
 
 // Public Functions...
@@ -2158,6 +2159,10 @@ void CvPlayer::doTurn()
 	EXTRA_POWER_CHECK
 
 	doGold();
+
+	EXTRA_POWER_CHECK
+
+	doFundingFatherUpKeep();
 
 	EXTRA_POWER_CHECK
 
@@ -11352,6 +11357,149 @@ void CvPlayer::doGold()
 
 	OOS_LOG("doGold", iGoldChange);
 	changeGold(iGoldChange);
+}
+
+void CvPlayer::doFundingFatherUpKeep() {
+	int iUpKeep = calculateFundingFartherUpKeep();
+
+	if (iUpKeep == 0)
+		return;
+
+	CvWString szBuffer;
+	szBuffer = gDLL->getText("TXT_KEY_FUNDING_FATHER_UPKEEP_PAYED", iUpKeep);
+	gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), false, false);
+
+	FAssert(isHuman() || ((getGold() - iUpKeep) >= 0));
+
+	// TODO Consider what to do it gold is negative
+
+	changeGold(-iUpKeep);
+ }
+
+int CvPlayer::calculateFundingFartherUpKeep() {
+	int totalUpkeep = 0;
+	for (int i = 0; i < GC.getNumFatherCategoryInfos(); i++) {
+		totalUpkeep += calculateFundingFartherUpKeep(i);
+	}
+	return totalUpkeep;
+}
+
+int CvPlayer::calculateNextFundingFartherUpKeep(int fatherCategory) {
+	int iOwnFatherInCategory = 0;
+	int iTotalFatherInCategory = 0;
+	for (int i = 0; i < GC.getNumFatherInfos(); ++i) {
+		TeamTypes fatherTeam = GC.getGame().getFatherTeam((FatherTypes)i);
+
+		if (GC.getFatherInfo((FatherTypes)i).getFatherCategory() == fatherCategory)
+		{
+			iTotalFatherInCategory += 1;
+			if (getTeam() == fatherTeam) {
+				iOwnFatherInCategory += 1;
+			}
+		}
+	}
+
+	if(iOwnFatherInCategory == 0)
+		return 0;
+
+	float upkeepStart = GC.getFUNDING_FARTHER_UPKEEP_START();
+	float upkeepEnd = GC.getFUNDING_FARTHER_UPKEEP_END();
+
+	float categoryFactor = 1.0;
+	switch (fatherCategory) {
+		case 0:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_EXPLORATION_FACTOR();
+			break;
+		case 1:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_RELIGION_FACTOR();
+			break;
+		case 2:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_TREADE_FACTOR();
+			break;
+		case 3:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_MILITARY_FACTOR();
+			break;
+		case 4:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_POLITICS_FACTOR();
+			break;
+		default:
+			categoryFactor = 1.0;
+	}
+
+	long iRealPopulationMultiplier = (long) GC.getDefineINT("REAL_POPULATION_MULTIPLIER");
+	int iTotalPopulation = getRealPopulation()/iRealPopulationMultiplier;
+	int iNumCities = getNumCities();
+
+	float upkeepRatePrFather = pow(upkeepEnd / upkeepStart, 1.0f / (iTotalFatherInCategory - 1));
+
+	int iUpkeep = 0;
+
+	if (iOwnFatherInCategory < iTotalFatherInCategory) {
+		iUpkeep = (int) (calculateFundingFartherBaseUpKeep(upkeepStart, upkeepRatePrFather, iOwnFatherInCategory + 1) * categoryFactor * iTotalPopulation);
+	}
+
+	return iUpkeep;
+}
+
+
+int CvPlayer::calculateFundingFartherUpKeep(int fatherCategory) {
+	int iOwnFatherInCategory = 0;
+	int iTotalFatherInCategory = 0;
+	for (int i = 0; i < GC.getNumFatherInfos(); ++i) {
+		TeamTypes fatherTeam = GC.getGame().getFatherTeam((FatherTypes)i);
+
+		if (GC.getFatherInfo((FatherTypes)i).getFatherCategory() == fatherCategory)
+		{
+			iTotalFatherInCategory += 1;
+			if (getTeam() == fatherTeam) {
+				iOwnFatherInCategory += 1;
+			}
+		}
+	}
+
+	if(iOwnFatherInCategory == 0)
+		return 0;
+
+	float upkeepStart = GC.getFUNDING_FARTHER_UPKEEP_START();
+	float upkeepEnd = GC.getFUNDING_FARTHER_UPKEEP_END();
+
+	float categoryFactor = 1.0;
+	switch (fatherCategory) {
+		case 0:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_EXPLORATION_FACTOR();
+			break;
+		case 1:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_RELIGION_FACTOR();
+			break;
+		case 2:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_TREADE_FACTOR();
+			break;
+		case 3:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_MILITARY_FACTOR();
+			break;
+		case 4:
+			categoryFactor = GC.getFUNDING_FARTHER_UPKEEP_POLITICS_FACTOR();
+			break;
+		default:
+			categoryFactor = 1.0;
+	}
+
+	long iRealPopulationMultiplier = (long) GC.getDefineINT("REAL_POPULATION_MULTIPLIER");
+	int iTotalPopulation = getRealPopulation()/iRealPopulationMultiplier;
+	int iNumCities = getNumCities();
+
+	float upkeepRatePrFather = pow(upkeepEnd / upkeepStart, 1.0f / (iTotalFatherInCategory - 1));
+
+	int iUpkeep = 0;
+    for (int i = 1; i <= iOwnFatherInCategory; ++i) {
+		iUpkeep += (int) (calculateFundingFartherBaseUpKeep(upkeepStart, upkeepRatePrFather, i) * categoryFactor * iTotalPopulation);
+	}
+
+	return iUpkeep;
+}
+
+inline float CvPlayer::calculateFundingFartherBaseUpKeep(float upkeepStart, float upkeepRatePrFather, int iFatherNumber) {
+	return upkeepStart * pow(upkeepRatePrFather, iFatherNumber - 1);
 }
 
 /** NBMOD REF **/

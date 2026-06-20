@@ -77,6 +77,8 @@ void CyPlayerPythonInterface4(python::class_<CyPlayer>& x)
 
 		.def("getCivEffectCount", &CyPlayer::getCivEffectCount, "int (CivEffectTypes eCivEffect)")
 		.def("getNumUnitsOnDock", &CyPlayer::getNumUnitsOnDock, "unsigned int ()")
+		.def("calculateFundingFartherUpKeep", &CyPlayer::calculateFundingFartherUpKeep, "int (int fatherCategory)")
+		.def("calculateNextFundingFartherUpKeep", &CyPlayer::calculateNextFundingFartherUpKeep, "int (int fatherCategory)")
 		.def("getViableTradeRoutes", &CyPlayer::getViableTradeRoutesForUnit, "list (CyUnit* pUnit)")
 		;
 }
