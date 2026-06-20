@@ -2200,13 +2200,25 @@ bool CvDLLButtonPopup::launchEducationPopup(CvPopup* pPopup, CvPopupInfo &info)
 
 	int iNumUnits = 0;
 	UnitTypes eLastUnit = NO_UNIT;
+	CvPlot* pPlot = pCity->plot();
 	for (UnitTypes eUnitType = FIRST_UNIT; eUnitType < NUM_UNIT_TYPES; ++eUnitType)
 	{
 		CvUnitInfo& kUnit = GC.getUnitInfo(eUnitType);
 		int iPrice = pCity->getSpecialistTuition(eUnitType);
 		if (iPrice >= 0 && iPrice <= kPlayer.getGold())
 		{
+			int numUnitWithSpeciallity = 0;
+			for (int iU = 0; iU < pPlot->getNumUnits(); iU++)
+			{
+				CvUnit* pLoopUnit = pPlot->getUnitByIndex(iU);
+				if (pLoopUnit->getUnitType() == eUnitType)
+				{
+					numUnitWithSpeciallity++;
+				}
+			}
+
 			szText.Format(L"%s", kUnit.getDescription());
+			szText += CvWString::format(L" (%d)", numUnitWithSpeciallity);
 			if (iPrice > 0)
 			{
 				szText += CvWString::format(L" (%d%c)", iPrice, GC.getSymbolID(GOLD_CHAR));
@@ -3476,7 +3488,18 @@ bool CvDLLButtonPopup::launchTeacherListPopup(CvPopup* pPopup, CvPopupInfo &info
 				gDLL->getInterfaceIFace()->popupSetCheckBoxState(pPopup, 0, pCity->getOrderedStudentsRepeat(eUnit), eUnit);
 				gDLL->getInterfaceIFace()->popupCreateSpinBox(pPopup, eUnit, L"", pCity->getOrderedStudents(eUnit), 1, 50, 0);
 			} else {
-				gDLL->getInterfaceIFace()->popupSetBodyString(pPopup, gDLL->getText("TXT_KEY_EDIT_TEACHER_LIST_NO_TEACHER", kUnit.getDescription()));
+				CvPlot* pPlot = pCity->plot();
+				int numUnitWithSpeciallity = 0;
+				for (int iU = 0; iU < pPlot->getNumUnits(); iU++)
+				{
+					CvUnit* pLoopUnit = pPlot->getUnitByIndex(iU);
+					if (pLoopUnit->getUnitType() == eUnit)
+					{
+						numUnitWithSpeciallity++;
+					}
+				}
+
+				gDLL->getInterfaceIFace()->popupSetBodyString(pPopup, gDLL->getText("TXT_KEY_EDIT_TEACHER_LIST_NO_TEACHER", kUnit.getDescription(), numUnitWithSpeciallity));
 			}
 			gDLL->getInterfaceIFace()->popupEndLayout(pPopup);
 		}
