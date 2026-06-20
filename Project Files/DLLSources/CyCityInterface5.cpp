@@ -122,9 +122,13 @@ void CyCityPythonInterface5(python::class_<CyCity>& x)
 		.def("addImport", &CyCity::addImport, "void addImport(int /*YieldTypes*/ eYield)")
 		.def("removeImport", &CyCity::removeImport, "void removeImport(int /*YieldTypes*/ eYield)")
 		.def("getMaintainLevel", &CyCity::getMaintainLevel, "int getMaintainLevel(int /*YieldTypes*/ eYield)")
-		// R&R mod, vetiarvind, max yield import limit - start			
+		// R&R mod, vetiarvind, max yield import limit - start
 		.def("getImportsLimit", &CyCity::getImportsLimit, "int getImportsLimit(int /*YieldTypes*/ eYield)")
 		// R&R mod, vetiarvind, max yield import limit - end
+		// WTP, KMH, Domestic Advisor import/export toggle - START
+		.def("togleTrade", &CyCity::togleTrade, "void togleTrade(int pCityId, int /*YieldTypes*/ eYield)")
+		.def("togleDomestigTrade", &CyCity::togleDomestigTrade, "void togleDomestigTrade()")
+		// WTP, KMH, Domestic Advisor import/export toggle - END
 		// transport feeder - start - Nightinggale
 		.def("isImportFeeder", &CyCity::isImportFeeder, "bool isImportFeeder(int /*YieldTypes*/ eYield) const")
 		.def("isAutoImportStopped", &CyCity::isAutoImportStopped, "bool isAutoImportStopped(int /*YieldTypes*/ eYield) const")

@@ -372,8 +372,12 @@ public:
 	bool isImport(int /*YieldTypes*/ eYield) const;
 	void addImport(int /*YieldTypes*/ eYield);
 	void removeImport(int /*YieldTypes*/ eYield);
-	int getMaintainLevel(int /*YieldTypes*/ eYield) const;	
+	int getMaintainLevel(int /*YieldTypes*/ eYield) const;
 	int getImportsLimit(int /*YieldTypes*/ eYield) const;	// R&R mod, vetiarvind, max yield import limit
+	// WTP, KMH, Domestic Advisor import/export toggle - START
+	void togleTrade(int pCityId, int /*YieldTypes*/ eYield);
+	void togleDomestigTrade();
+	// WTP, KMH, Domestic Advisor import/export toggle - END
 	// transport feeder - start - Nightinggale
 	bool isImportFeeder(int /*YieldTypes*/ eYield) const;
 	bool isAutoImportStopped(int /*YieldTypes*/ eYield) const;

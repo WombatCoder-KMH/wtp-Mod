@@ -784,6 +784,11 @@ public:
 	void setImportsLimit(YieldTypes eYield, int iValue);
 	int getImportsLimit(YieldTypes eYield) const;
 	// R&R mod, vetiarvind, max yield import limit - End
+	// WTP, KMH, Domestic Advisor import/export toggle - START
+	// Cycles a yield's import/export/maintain-level settings through a fixed set of presets, scaled by game speed
+	void togleTrade(int pCityId, YieldTypes eYield);
+	void togleDomestigTrade();
+	// WTP, KMH, Domestic Advisor import/export toggle - END
 	// R&R, ray, finishing Custom House Screen START
 	void setCustomHouseSellThreshold(YieldTypes eYield, int iThreshold);
 	int getCustomHouseSellThreshold(YieldTypes eYield) const;

@@ -746,6 +746,11 @@
 			<Type>INTERFACE_DOMESTIC_TRADE_COUNT</Type>
 			<Path>Art/Interface/Game Hud/Actions/trade_count.dds</Path>
 		</InterfaceArtInfo>
+		<!-- WTP, KMH, Domestic Advisor import/export toggle - reuses the import_export icon, same as INTERFACE_IMPORT_EXPORT_BUTTON -->
+		<InterfaceArtInfo>
+			<Type>INTERFACE_IMPORT_EXPORT_EXT_BUTTON</Type>
+			<Path>Art/Interface/Game Hud/Actions/import_export.dds</Path>
+		</InterfaceArtInfo>
 		<InterfaceArtInfo>
 			<Type>INTERFACE_TOTAL_PRODUCTION_BUTTON</Type>
 			<Path>Art/Interface/Screens/City_Management/Overview.dds</Path>

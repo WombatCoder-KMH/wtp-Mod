@@ -1653,6 +1653,22 @@ int CyCity::getImportsLimit(int /*YieldTypes*/ eYield) const
 	return m_pCity ? m_pCity->getImportsLimit((YieldTypes) eYield) : -1;
 }
 // R&R mod, vetiarvind, max yield import limit - end
+// WTP, KMH, Domestic Advisor import/export toggle - START
+void CyCity::togleTrade(int pCityId, int /*YieldTypes*/ eYield)
+{
+	if (m_pCity != NULL)
+	{
+		pointer(CREATE_ASSERT_DATA)->togleTrade(pCityId, (YieldTypes) eYield);
+	}
+}
+void CyCity::togleDomestigTrade()
+{
+	if (m_pCity != NULL)
+	{
+		pointer(CREATE_ASSERT_DATA)->togleDomestigTrade();
+	}
+}
+// WTP, KMH, Domestic Advisor import/export toggle - END
 // transport feeder - start - Nightinggale
 bool CyCity::isImportFeeder(int /*YieldTypes*/ eYield) const
 {

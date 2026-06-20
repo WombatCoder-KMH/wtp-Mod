@@ -9,6 +9,7 @@ import BuildingAdvisor
 import DomesticDemandAdvisor
 import HappinessAdvisor
 import ImportExportAdvisor
+import ImportExportExtAdvisor
 import ProductionAdvisor
 import NativeAdvisor
 import WarehouseAdvisor
@@ -138,6 +139,7 @@ class CvDomesticAdvisor:
 		self.WAREHOUSE_STATE          = self.addButton("WareHouseState",         "INTERFACE_STORES_BUTTON"           , WarehouseAdvisor.WarehouseAdvisor(self))
 		self.BUILDING_STATE           = self.addButton("BuildingState",          "INTERFACE_CITY_BUILD_BUTTON"       , BuildingAdvisor.BuildingAdvisor(self))
 		self.IMPORTEXPORT_STATE       = self.addButton("ImportExportState",      "INTERFACE_CITY_GOVENOR_BUTTON"     , ImportExportAdvisor.ImportExportAdvisor(self))
+		self.IMPORTEXPORT_EXT_STATE   = self.addButton("ImportExportExtState",   "INTERFACE_IMPORT_EXPORT_EXT_BUTTON" , ImportExportExtAdvisor.ImportExportExtAdvisor(self))
 		self.TRADE_COUNT_STATE        = self.addButton("TradeCountState",        "INTERFACE_DOMESTIC_TRADE_COUNT"    , TradeCountAdvisor.TradeCountAdvisor(self))
 		self.CITIZEN_STATE            = self.addButton("CitizenState",           "INTERFACE_CITY_CITIZEN_BUTTON")
 		self.TOTAL_PRODUCTION_STATE   = self.addButton("TotalProductionState",   "INTERFACE_TOTAL_PRODUCTION_BUTTON")  # total production page - Nightinggale

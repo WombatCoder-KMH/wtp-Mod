@@ -12660,6 +12660,273 @@ int CvCity::getMaxImportAmount(YieldTypes eYield) const
 
 // R&R mod, vetiarvind, max yield import limit - End
 
+// WTP, KMH, Domestic Advisor import/export toggle - START
+// Cycles a single yield's import/export settings through a fixed set of presets (off -> export-only -> export+import -> ... -> import+export at a higher threshold),
+// scaled by game speed storage percent. Used by the Domestic Advisor's condensed import/export table to let the player click through settings quickly.
+// Note: has to match the network task format used by CvCity::handleAutoTraderouteSetup
+void CvCity::togleTrade(int pCityId, YieldTypes eYield)
+{
+	const int iGameSpeedModifiedBaseStorageQuanta = (100 * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent()) / 100;
+
+	CvPlayer& kPlayer = GET_PLAYER(GC.getGameINLINE().getActivePlayer());
+	CvCity* pCity = kPlayer.getCity(pCityId);
+	if (pCity == NULL || !GC.getYieldInfo(eYield).isCargo())
+	{
+		return;
+	}
+
+	bool bImport          = 0;
+	bool bExport          = 0;
+	bool bMaintainImport  = 0;
+	bool bAutoExport      = 0;
+	int iImportLimitLevel = 0;
+	int iMaintainLevel    = 0;
+
+	if (0 == pCity->isImport(eYield)
+		&& 0 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& 0 == pCity->getImportsLimit(eYield)
+		&& 0 == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bExport          = 1;
+		iImportLimitLevel = 0;
+		iMaintainLevel    = 0;
+	}
+	else if (0 == pCity->isImport(eYield)
+		&& 1 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& 0 == pCity->getImportsLimit(eYield)
+		&& 0 == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bExport          = 1;
+		iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (0 == pCity->isImport(eYield)
+		&& 1 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getImportsLimit(eYield)
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == pCity->isImport(eYield)
+		&& 1 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getImportsLimit(eYield)
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 3 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == pCity->isImport(eYield)
+		&& 1 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getImportsLimit(eYield)
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == pCity->isImport(eYield)
+		&& 1 == pCity->isExport(eYield)
+		&& 0 == pCity->getImportsMaintain(eYield)
+		&& 0 == pCity->isAutoExport(eYield)
+		&& (8 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getImportsLimit(eYield)
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == pCity->getMaintainLevel(eYield)
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	// else: (8x/1x) -> off, leaving all the locals at their zeroed defaults
+
+	if (bImport != pCity->isImport(eYield)
+		|| bExport != pCity->isExport(eYield)
+		|| bMaintainImport != pCity->getImportsMaintain(eYield)
+		|| bAutoExport != pCity->isAutoExport(eYield)
+		|| iMaintainLevel != pCity->getMaintainLevel(eYield)
+		|| iImportLimitLevel != pCity->getImportsLimit(eYield)
+		)
+	{
+		NetworkDataTradeRouteInts buffer;
+		buffer.iImportLimitLevel = iImportLimitLevel;
+		buffer.iMaintainLevel    = iMaintainLevel;
+
+		gDLL->sendDoTask(pCityId, TASK_YIELD_TRADEROUTE, eYield, buffer.iNetwork, bImport, bExport, bMaintainImport, bAutoExport);
+	}
+}
+
+// Same preset cycle as togleTrade(), but applied to every domestic-demand yield at once if they're all
+// currently set the same way (a no-op otherwise, forcing the player to use the per-yield toggle first)
+void CvCity::togleDomestigTrade()
+{
+	const int iGameSpeedModifiedBaseStorageQuanta = (100 * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent()) / 100;
+
+	const InfoArray<YieldTypes>& kYieldArray = GC.getDomesticDemandYieldTypes();
+
+	bool bImport          = 0;
+	bool bExport          = 0;
+	bool bMaintainImport  = 0;
+	bool bAutoExport      = 0;
+	int iImportLimitLevel = 0;
+	int iMaintainLevel    = 0;
+
+	bool bAllDomesticIsEqual = true;
+
+	for (int i = 0; i < kYieldArray.getLength(); ++i)
+	{
+		const YieldTypes eYield = kYieldArray.get(i);
+
+		if (i == 0)
+		{
+			bImport           = isImport(eYield);
+			bExport           = isExport(eYield);
+			bMaintainImport   = getImportsMaintain(eYield);
+			bAutoExport       = isAutoExport(eYield);
+			iImportLimitLevel = getImportsLimit(eYield);
+			iMaintainLevel    = getMaintainLevel(eYield);
+		}
+		else
+		{
+			bAllDomesticIsEqual = bAllDomesticIsEqual
+				&& bImport == isImport(eYield)
+				&& bExport == isExport(eYield)
+				&& bMaintainImport == getImportsMaintain(eYield)
+				&& bAutoExport == isAutoExport(eYield)
+				&& iImportLimitLevel == getImportsLimit(eYield)
+				&& iMaintainLevel == getMaintainLevel(eYield);
+		}
+	}
+
+	if (!bAllDomesticIsEqual)
+	{
+		bImport          = 0;
+		bExport          = 0;
+		bMaintainImport  = 0;
+		bAutoExport      = 0;
+		iImportLimitLevel = 0;
+		iMaintainLevel    = 0;
+	}
+	else if (0 == bImport
+		&& 0 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& 0 == iImportLimitLevel
+		&& 0 == iMaintainLevel
+		)
+	{
+		bExport          = 1;
+		iImportLimitLevel = 0;
+		iMaintainLevel    = 0;
+	}
+	else if (0 == bImport
+		&& 1 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& 0 == iImportLimitLevel
+		&& 0 == iMaintainLevel
+		)
+	{
+		bExport          = 1;
+		iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (0 == bImport
+		&& 1 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == iImportLimitLevel
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == iMaintainLevel
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 1 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == bImport
+		&& 1 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == iImportLimitLevel
+		&& (1 * iGameSpeedModifiedBaseStorageQuanta) == iMaintainLevel
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 3 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == bImport
+		&& 1 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == iImportLimitLevel
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == iMaintainLevel
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 3 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	else if (1 == bImport
+		&& 1 == bExport
+		&& 0 == bMaintainImport
+		&& 0 == bAutoExport
+		&& (8 * iGameSpeedModifiedBaseStorageQuanta) == iImportLimitLevel
+		&& (3 * iGameSpeedModifiedBaseStorageQuanta) == iMaintainLevel
+		)
+	{
+		bImport          = 1;
+		bExport          = 1;
+		iImportLimitLevel = 8 * iGameSpeedModifiedBaseStorageQuanta;
+		iMaintainLevel    = 1 * iGameSpeedModifiedBaseStorageQuanta;
+	}
+	// else: (8x/1x) -> off, leaving all the locals at their zeroed defaults (also covers the !bAllDomesticIsEqual reset)
+
+	for (int i = 0; i < kYieldArray.getLength(); ++i)
+	{
+		const YieldTypes eYield = kYieldArray.get(i);
+
+		if (bImport != isImport(eYield)
+			|| bExport != isExport(eYield)
+			|| bMaintainImport != getImportsMaintain(eYield)
+			|| bAutoExport != isAutoExport(eYield)
+			|| iMaintainLevel != getMaintainLevel(eYield)
+			|| iImportLimitLevel != getImportsLimit(eYield)
+			)
+		{
+			NetworkDataTradeRouteInts buffer;
+			buffer.iImportLimitLevel = iImportLimitLevel;
+			buffer.iMaintainLevel    = iMaintainLevel;
+
+			gDLL->sendDoTask(getID(), TASK_YIELD_TRADEROUTE, eYield, buffer.iNetwork, bImport, bExport, bMaintainImport, bAutoExport);
+		}
+	}
+}
+// WTP, KMH, Domestic Advisor import/export toggle - END
+
 // transport feeder - start - Nightinggale
 
 void CvCity::setImportsMaintain(YieldTypes eYield, bool bSetting)
