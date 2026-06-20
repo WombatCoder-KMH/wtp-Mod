@@ -240,7 +240,7 @@ class MapConstants :
         #steps will be needed but this option will cause more ocean in the
         #middle of the map. The possible choices are 0 = NO_SEPARATION,
         #1 = NORTH_SOUTH_SEPARATION and 2 = EAST_WEST_SEPARATION.
-        self.hmSeparation = 0
+        self.hmSeparation = 1
         
         #If you sink the margins all the way to 0.0, they become too obvious.
         #This variable sets the maximum amount of sinking
@@ -274,8 +274,8 @@ class MapConstants :
 
         #Chance for plates to grow. Higher chance tends to make more regular
         #shapes. Lower chance makes more irregular shapes and takes longer.
-        self.plateGrowthChanceX = 0.2
-        self.plateGrowthChanceY = 0.33
+        self.plateGrowthChanceX = 0.18
+        self.plateGrowthChanceY = 0.22
 
         #This sets the amount that tectonic plates differ in altitude.
         self.plateStagger = 0.1
@@ -1332,6 +1332,69 @@ class HeightMap :
         mc.hmHeight = newHeight
         self.heightMap = newHeightMap
         
+    def sprinkleSmallIslands(self):
+        islandAdded = [False] * (mc.hmWidth*mc.hmHeight)
+
+        PRand.seed()
+        for y in range(mc.hmHeight):
+            if (y < 0 or y > mc.hmHeight - 1 - 0):
+                continue
+            for x in range(mc.hmWidth):
+                if (x < 1 or x > (mc.hmWidth - 1) - 1):
+                    continue
+                i = GetHmIndex(x,y)
+
+                mapTilesCount = self.countplotsWithinMap(x, y, 3)
+
+                landCountClose = self.countPlotsAboveSealevel(x, y, 2)
+                landCountFare = self.countPlotsAboveSealevel(x, y, 4)
+
+                minY = 0
+                maxY = mc.hmHeight - 1
+
+                # Calculate polar region bonus
+                poplarBonusFactor = 1
+                if (y >= minY + 1 and y <= minY + 4) or (y <= maxY - 1 and y >= maxY - 4):
+                    poplarBonusFactor = 2
+
+                if landCountClose == 0 and landCountFare < 5:
+                    if self.heightMap[i] <= self.seaLevel:
+                        if PRand.randint(0,100) < 1.5 * poplarBonusFactor * (1 - float(landCountFare)/float(mapTilesCount)):
+                            islandAdded[i] = True
+
+        yRange = range(mc.hmHeight)
+        yRange.reverse()
+
+        for y in yRange:
+            line = ""
+            for x in range(mc.hmWidth):
+                i = GetHmIndex(x,y)
+                if islandAdded[i] == True:
+                    self.heightMap[i] = self.seaLevel + 0.2
+                    line = line + "x"
+                else:
+                    line = line + "."
+            CvUtil.myPrint(line)
+
+    def countPlotsAboveSealevel(self, x, y, distance):
+        count = 0
+        for yy in range(y - distance, y + distance + 1):
+            for xx in range(x - distance, x + distance + 1):
+                ii = GetHmIndex(xx,yy)
+                if ii != -1:
+                    if self.heightMap[ii] > self.seaLevel:
+                        count += 1
+        return count
+
+    def countplotsWithinMap(self, x, y, distance):
+        count = 0
+        for yy in range(y - distance, y + distance + 1):
+            for xx in range(x - distance, x + distance + 1):
+                ii = GetHmIndex(xx,yy)
+                if ii != -1:
+                    count += 1
+        return count
+
     def calculateSeaLevel(self):
         self.seaLevel = FindValueFromPercent(self.heightMap,mc.hmWidth,mc.hmHeight,mc.landPercent,0.02,True)
         return
@@ -1414,7 +1477,7 @@ class HeightMap :
     
     def printInitialPeaks(self):
         lineString = "midpoint displacement peaks and margins"
-        print lineString
+        CvUtil.myPrint(lineString)
         if not mc.WrapY:
             adjustedHeight = mc.hmHeight - 1
         else:
@@ -1429,13 +1492,13 @@ class HeightMap :
                     lineString += "1"
                 elif self.heightMap[i] == 0.0:
                     lineString += "0"
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printHeightMap(self):
         lineString = "Height Map"
-        print lineString
+        CvUtil.myPrint(lineString)
         for y in range(mc.hmHeight - 1,-1,-1):
             lineString = ""
             for x in range(0,mc.hmWidth,1):
@@ -1446,13 +1509,13 @@ class HeightMap :
                     lineString += '.'
                 else:
                     lineString += chr(mapLoc + 48)
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printPlateMap(self,plateMap):
         lineString = "Plate Map"
-        print lineString
+        CvUtil.myPrint(lineString)
         for y in range(mc.hmHeight - 1,-1,-1):
             lineString = ""
             for x in range(0,mc.hmWidth,1):
@@ -1461,9 +1524,9 @@ class HeightMap :
                 if mapLoc > 40:
                     mapLoc = 41
                 lineString += chr(mapLoc + 48)
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
         
     def printPreSmoothMap(self,preSmoothMap):
         lineString = "Pre-Smooth Map"
@@ -2240,7 +2303,7 @@ class SmallMaps :
         print lineString
         
     def printPlotMap(self):
-        print "Plot Map"
+        CvUtil.myPrint("Plot Map")
         for y in range(mc.height - 1,-1,-1):
             lineString = ""
             for x in range(mc.width):
@@ -2253,9 +2316,9 @@ class SmallMaps :
                     lineString += '+'
                 else:
                     lineString += '.'
-            print lineString
+            CvUtil.myPrint(lineString)
         lineString = " "
-        print lineString
+        CvUtil.myPrint(lineString)
     def printTerrainMap(self):
         print "Terrain Map"
         wz = WindZones(mc.height,80,-80)
@@ -4750,6 +4813,7 @@ def generatePlotTypes():
 ##    hm.printHeightMap()
     hm.fillInLakes()
     hm.addWaterBands()
+    hm.sprinkleSmallIslands()
 ##    hm.printHeightMap()
     cm.createClimateMaps()
     sm.initialize()
