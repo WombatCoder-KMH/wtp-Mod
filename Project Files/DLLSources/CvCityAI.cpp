@@ -574,12 +574,7 @@ void CvCityAI::AI_chooseProduction()
 		return;
 	}
 
-	// TAC - AI produces FF Points - koma13 - START
-	if (AI_chooseConvince())
-	{
-		return;
-	}
-	// TAC - AI produces FF Points - koma13 - END
+	// WTP, KMH, AI never produces founding father points - removed AI_chooseConvince() call
 
 	// TAC - AI Buildings - koma13 - START
 	if (AI_chooseBuilding(BUILDINGFOCUS_MILITARY, MAX_INT, 8))

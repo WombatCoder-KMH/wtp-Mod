@@ -2584,11 +2584,7 @@ void CvTeam::offerFoundingFather(FatherTypes eFather)
 			}
 		}
 	}
-	else
-	{
-		// AI code just accepts anything
-		convinceFather(eFather, true);
-	}
+	// WTP, KMH, AI teams never auto-accept founding fathers - removed AI convinceFather() call
 }
 
 // Protected Functions...
@@ -2704,10 +2700,7 @@ void CvTeam::testFoundingFather()
 						}
 					}
 				}
-				else //This is an AI only team, convince the father immediately during AI movements while humans are frozen.
-				{
-					convinceFather(eFather, true);
-				}
+				// WTP, KMH, AI teams never auto-accept founding fathers - removed AI convinceFather() call
 			}
 		}
 	}
